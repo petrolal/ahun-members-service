@@ -1,11 +1,11 @@
 spring:
   application:
-    name: ahun-birthday-service
+    name: ahun-members-service
 
   datasource:
     username: ahun
     password: ahun
-    url: jdbc:postgresql://localhost:5432/ahun_birthday_service
+    url: jdbc:postgresql://localhost:5432/ahun_members_service
     driver-class-name: org.postgresql.Driver
 
   jpa:

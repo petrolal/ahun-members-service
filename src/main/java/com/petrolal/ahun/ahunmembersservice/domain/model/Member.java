@@ -1,4 +1,4 @@
-package com.petrolal.ahun.ahunbirthdayservice.domain.model;
+package com.petrolal.ahun.ahunmembersservice.domain.model;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;

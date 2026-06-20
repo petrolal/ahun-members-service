@@ -6,7 +6,7 @@ plugins {
 
 group = "com.petrolal.ahun"
 version = "0.0.1-SNAPSHOT"
-description = "ahun-birthday-service"
+description = "ahun-members-service"
 
 java {
     toolchain {

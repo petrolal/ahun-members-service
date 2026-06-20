@@ -1,10 +1,10 @@
-package com.petrolal.ahun.ahunbirthdayservice;
+package com.petrolal.ahun.ahunmembersservice;
 
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
 
 @SpringBootTest
-class AhunBirthdayServiceApplicationTests {
+class AhunMembersServiceApplicationTests {
 
     @Test
     void contextLoads() {

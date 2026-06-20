@@ -1,6 +1,6 @@
-package com.petrolal.ahun.ahunbirthdayservice.infrastructure.adapters.out.persistence.entity;
+package com.petrolal.ahun.ahunmembersservice.infrastructure.adapters.out.persistence.entity;
 
-import com.petrolal.ahun.ahunbirthdayservice.domain.model.Member;
+import com.petrolal.ahun.ahunmembersservice.domain.model.Member;
 import jakarta.persistence.*;
 
 import java.time.LocalDate;

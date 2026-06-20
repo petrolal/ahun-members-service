@@ -1,4 +1,4 @@
-package com.petrolal.ahun.ahunbirthdayservice.domain.exceptions;
+package com.petrolal.ahun.ahunmembersservice.domain.exceptions;
 
 public class NotFoundException extends RuntimeException {
     public NotFoundException(String message) {

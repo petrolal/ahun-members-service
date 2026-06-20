@@ -1,1 +1,1 @@
-rootProject.name = "ahun-birthday-service"
+rootProject.name = "ahun-members-service"

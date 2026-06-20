@@ -1,4 +1,4 @@
-package com.petrolal.ahun.ahunbirthdayservice.infrastructure.config;
+package com.petrolal.ahun.ahunmembersservice.infrastructure.config;
 
 import io.swagger.v3.oas.models.OpenAPI;
 import io.swagger.v3.oas.models.info.Info;
@@ -11,7 +11,7 @@ public class OpenApiConfig {
     public OpenAPI customOpenAPI() {
         return new OpenAPI()
                 .info(new Info()
-                        .title("Ahun Birthday Service")
+                        .title("Ahun Members Service")
                         .version("1.0")
                         .description("Auto-generated Documentation"));
     }

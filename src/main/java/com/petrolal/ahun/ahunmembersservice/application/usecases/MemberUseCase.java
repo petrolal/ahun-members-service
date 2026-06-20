@@ -1,8 +1,8 @@
-package com.petrolal.ahun.ahunbirthdayservice.application.usecases;
+package com.petrolal.ahun.ahunmembersservice.application.usecases;
 
-import com.petrolal.ahun.ahunbirthdayservice.application.ports.MemberPort;
-import com.petrolal.ahun.ahunbirthdayservice.application.ports.MemberRepositoryPort;
-import com.petrolal.ahun.ahunbirthdayservice.domain.model.Member;
+import com.petrolal.ahun.ahunmembersservice.application.ports.MemberPort;
+import com.petrolal.ahun.ahunmembersservice.application.ports.MemberRepositoryPort;
+import com.petrolal.ahun.ahunmembersservice.domain.model.Member;
 
 import java.time.LocalDate;
 import java.util.List;

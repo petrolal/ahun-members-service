@@ -1,6 +1,6 @@
-package com.petrolal.ahun.ahunbirthdayservice.infrastructure.adapters.out.persistence.repository;
+package com.petrolal.ahun.ahunmembersservice.infrastructure.adapters.out.persistence.repository;
 
-import com.petrolal.ahun.ahunbirthdayservice.infrastructure.adapters.out.persistence.entity.MemberEntity;
+import com.petrolal.ahun.ahunmembersservice.infrastructure.adapters.out.persistence.entity.MemberEntity;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 import java.util.List;

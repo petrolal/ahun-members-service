@@ -1,6 +1,6 @@
-package com.petrolal.ahun.ahunbirthdayservice.application.ports;
+package com.petrolal.ahun.ahunmembersservice.application.ports;
 
-import com.petrolal.ahun.ahunbirthdayservice.domain.model.Member;
+import com.petrolal.ahun.ahunmembersservice.domain.model.Member;
 
 import java.time.Month;
 import java.util.List;
