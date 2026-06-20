@@ -1,0 +1,13 @@
+spring:
+  application:
+    name: ahun-birthday-service
+
+  datasource:
+    username: ahun
+    password: ahun
+    url: jdbc:postgresql://localhost:5432/ahun_birthday_service
+    driver-class-name: org.postgresql.Driver
+
+  jpa:
+    hibernate:
+      ddl-auto: none

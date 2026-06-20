@@ -1,0 +1,28 @@
+package com.petrolal.ahun.ahunbirthdayservice.application.usecases;
+
+import com.petrolal.ahun.ahunbirthdayservice.application.ports.MemberPort;
+import com.petrolal.ahun.ahunbirthdayservice.application.ports.MemberRepositoryPort;
+import com.petrolal.ahun.ahunbirthdayservice.domain.model.Member;
+
+import java.time.LocalDate;
+import java.util.List;
+
+public class MemberUseCase implements MemberPort {
+
+    private final MemberRepositoryPort memberRepositoryPort;
+
+    public MemberUseCase(MemberRepositoryPort memberRepositoryPort) {
+        this.memberRepositoryPort = memberRepositoryPort;
+    }
+
+    @Override
+    public List<Member> getMembers() {
+        return memberRepositoryPort.findall();
+    }
+
+    @Override
+    public List<Member> getMembersByCurrentMonth() {
+        int monthValue = LocalDate.now().getMonthValue();
+        return memberRepositoryPort.findByMonth(monthValue);
+    }
+}
