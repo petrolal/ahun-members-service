@@ -1,18 +1,24 @@
 spring:
+  devtools:
+    restart:
+      enabled: false
+
   application:
     name: ahun-members-service
 
   datasource:
-    username: ahun
-    password: ahun
-    url: jdbc:postgresql://localhost:5432/ahun_members_service
+    url: ${SPRING_DATASOURCE_URL}
+    username: ${SPRING_DATASOURCE_USERNAME}
+    password: ${SPRING_DATASOURCE_PASSWORD}
     driver-class-name: org.postgresql.Driver
+    hikari:
+      maximum-pool-size: 5
 
   jpa:
     hibernate:
       ddl-auto: none
 
 telegram:
-  bot-token: 7956786952:AAHxneZJ9jic05qcDAU9aAgj-6ggPGZazhI
-  chat-id: 2046779343
+  bot-token: ${TELEGRAM_BOT_TOKEN}
+  chat-id: ${TELEGRAM_CHAT_ID}
 
