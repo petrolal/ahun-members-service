@@ -5,7 +5,6 @@ import com.petrolal.ahun.ahunmembersservice.domain.model.Member;
 import com.petrolal.ahun.ahunmembersservice.infrastructure.adapters.out.persistence.entity.MemberEntity;
 import org.springframework.stereotype.Repository;
 
-import java.time.Month;
 import java.util.List;
 
 @Repository
@@ -31,5 +30,15 @@ public class MemberRepository implements MemberRepositoryPort {
                 .stream()
                 .map(MemberEntity::toDomain)
                 .toList();
+    }
+
+    @Override
+    public void deleteAll() {
+        repository.deleteAllInBatch();
+    }
+
+    @Override
+    public List<MemberEntity> saveAll(List<MemberEntity> members) {
+        return repository.saveAll(members);
     }
 }

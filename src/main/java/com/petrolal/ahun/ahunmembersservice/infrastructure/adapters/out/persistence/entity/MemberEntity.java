@@ -20,17 +20,18 @@ public class MemberEntity {
     private String email;
     private LocalDate birthday;
     private LocalDateTime createdAt;
+
+    @Column(name = "month_birthday", insertable = false, updatable = false)
     private int monthBirthday;
 
     public MemberEntity() {
     }
 
-    public MemberEntity(String email, String memberName, LocalDate birthday,  int monthBirthday) {
+    public MemberEntity(String email, String memberName, LocalDate birthday,  LocalDateTime createdAt) {
         this.email = email;
         this.memberName = memberName;
         this.birthday = birthday;
-        this.createdAt = LocalDateTime.now();
-        this.monthBirthday = monthBirthday;
+        this.createdAt = createdAt;
     }
 
     public static Member toDomain(MemberEntity memberEntity) {
@@ -39,7 +40,7 @@ public class MemberEntity {
                 memberEntity.getMemberName(),
                 memberEntity.getEmail(),
                 memberEntity.getBirthday(),
-                memberEntity.getMonthBirthday()
+                memberEntity.getCreatedAt()
         );
     }
 
@@ -79,15 +80,4 @@ public class MemberEntity {
         return createdAt;
     }
 
-    public void setCreatedAt(LocalDateTime createdAt) {
-        this.createdAt = createdAt;
-    }
-
-    public int getMonthBirthday() {
-        return monthBirthday;
-    }
-
-    public void setMonthBirthday(int monthBirthday) {
-        this.monthBirthday = monthBirthday;
-    }
 }

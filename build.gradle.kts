@@ -30,6 +30,12 @@ dependencies {
     runtimeOnly("org.flywaydb:flyway-database-postgresql")
     runtimeOnly("org.postgresql:postgresql")
 
+    implementation("com.google.api-client:google-api-client:2.8.0")
+    implementation("com.google.oauth-client:google-oauth-client-jetty:1.35.0")
+    implementation("com.google.apis:google-api-services-sheets:v4-rev20250106-2.0.0")
+
+    implementation("com.google.http-client:google-http-client-jackson2:1.47.0")
+
     developmentOnly("org.springframework.boot:spring-boot-devtools")
     developmentOnly("org.springframework.boot:spring-boot-docker-compose")
     testImplementation("org.springframework.boot:spring-boot-starter-data-jpa-test")
