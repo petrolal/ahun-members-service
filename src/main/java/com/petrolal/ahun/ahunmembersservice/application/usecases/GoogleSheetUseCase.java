@@ -6,7 +6,7 @@ import com.petrolal.ahun.ahunmembersservice.application.ports.MemberRepositoryPo
 import com.petrolal.ahun.ahunmembersservice.domain.model.Member;
 import com.petrolal.ahun.ahunmembersservice.domain.model.MemberFromSheet;
 import com.petrolal.ahun.ahunmembersservice.infrastructure.adapters.out.persistence.entity.MemberEntity;
-import com.petrolal.ahun.ahunmembersservice.infrastructure.adapters.out.persistence.google.GoogleSheetsAdapter;
+import com.petrolal.ahun.ahunmembersservice.infrastructure.adapters.out.persistence.externalapis.GoogleSheetsAdapter;
 
 import java.util.ArrayList;
 import java.util.List;
