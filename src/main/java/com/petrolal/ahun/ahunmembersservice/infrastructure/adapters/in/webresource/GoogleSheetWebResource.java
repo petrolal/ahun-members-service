@@ -2,7 +2,7 @@ package com.petrolal.ahun.ahunmembersservice.infrastructure.adapters.in.webresou
 
 import com.petrolal.ahun.ahunmembersservice.application.ports.GoogleSheetPort;
 import com.petrolal.ahun.ahunmembersservice.domain.model.Member;
-import com.petrolal.ahun.ahunmembersservice.domain.model.MemberFromSheet;
+import com.petrolal.ahun.ahunmembersservice.domain.dto.MemberFromSheetDto;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -13,7 +13,7 @@ import java.util.List;
 
 @Tag(name = "Google Sheets")
 @RestController
-@RequestMapping("api/sheets")
+@RequestMapping("/api/sheets")
 public class GoogleSheetWebResource {
 
     private final GoogleSheetPort googleSheetPort;
@@ -23,7 +23,7 @@ public class GoogleSheetWebResource {
     }
 
     @GetMapping
-    public List<MemberFromSheet> readMemberSheet() {
+    public List<MemberFromSheetDto> readMemberSheet() {
         return googleSheetPort.readMemberSheet();
     }
 

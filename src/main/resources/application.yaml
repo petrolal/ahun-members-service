@@ -11,3 +11,8 @@ spring:
   jpa:
     hibernate:
       ddl-auto: none
+
+telegram:
+  bot-token: 7956786952:AAHxneZJ9jic05qcDAU9aAgj-6ggPGZazhI
+  chat-id: 2046779343
+

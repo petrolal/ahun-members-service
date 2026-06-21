@@ -25,4 +25,5 @@ public class MemberUseCase implements MemberPort {
         int monthValue = LocalDate.now().getMonthValue();
         return memberRepositoryPort.findByMonth(monthValue);
     }
+
 }

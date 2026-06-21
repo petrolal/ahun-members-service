@@ -4,7 +4,7 @@ import com.google.api.services.sheets.v4.model.ValueRange;
 import com.petrolal.ahun.ahunmembersservice.application.ports.GoogleSheetPort;
 import com.petrolal.ahun.ahunmembersservice.application.ports.MemberRepositoryPort;
 import com.petrolal.ahun.ahunmembersservice.domain.model.Member;
-import com.petrolal.ahun.ahunmembersservice.domain.model.MemberFromSheet;
+import com.petrolal.ahun.ahunmembersservice.domain.dto.MemberFromSheetDto;
 import com.petrolal.ahun.ahunmembersservice.infrastructure.adapters.out.persistence.entity.MemberEntity;
 import com.petrolal.ahun.ahunmembersservice.infrastructure.adapters.out.persistence.externalapis.GoogleSheetsAdapter;
 
@@ -23,7 +23,7 @@ public class GoogleSheetUseCase implements GoogleSheetPort {
     }
 
     @Override
-    public List<MemberFromSheet> readMemberSheet() {
+    public List<MemberFromSheetDto> readMemberSheet() {
         try {
             ValueRange response = googleSheetsAdapter.getSheetsService()
                     .spreadsheets()
@@ -34,7 +34,7 @@ public class GoogleSheetUseCase implements GoogleSheetPort {
             return response.getValues()
                     .stream()
                     .skip(1)
-                    .map(MemberFromSheet::fromRow)
+                    .map(MemberFromSheetDto::fromRow)
                     .toList();
         } catch (Exception e) {
             throw new RuntimeException(e);
@@ -43,10 +43,10 @@ public class GoogleSheetUseCase implements GoogleSheetPort {
 
     @Override
     public List<Member> syncSheet() {
-        List<MemberFromSheet> response = this.readMemberSheet();
+        List<MemberFromSheetDto> response = this.readMemberSheet();
         List<MemberEntity> entity = new ArrayList<>();
 
-        for (MemberFromSheet i : response) {
+        for (MemberFromSheetDto i : response) {
             entity.add(
                     new MemberEntity(
                             i.email(),
