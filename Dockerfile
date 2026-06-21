@@ -1,5 +1,5 @@
 # Stage 1: Build
-FROM eclipse-temurin:21-jdk-alpine AS builder
+FROM eclipse-temurin:25-jdk-alpine AS builder
 WORKDIR /app
 # Copy only necessary files
 COPY build.gradle.kts settings.gradle.kts ./
@@ -12,7 +12,7 @@ COPY src ./src
 RUN ./gradlew bootJar --no-daemon -x test
 
 # Stage 2: Runtime
-FROM eclipse-temurin:21-jre-alpine
+FROM eclipse-temurin:25-jre-alpine
 WORKDIR /app
 # Copy only the jar file
 COPY --from=builder /app/build/libs/*.jar app.jar
