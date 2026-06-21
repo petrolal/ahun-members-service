@@ -7,30 +7,31 @@ import com.google.api.services.sheets.v4.SheetsScopes;
 import com.google.auth.http.HttpCredentialsAdapter;
 import com.google.auth.oauth2.GoogleCredentials;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.core.io.Resource;
 import org.springframework.stereotype.Component;
 
+import java.io.ByteArrayInputStream;
 import java.io.IOException;
+import java.nio.charset.StandardCharsets;
 import java.security.GeneralSecurityException;
 import java.util.Collections;
 
 @Component
 public class GoogleSheetsAdapter {
 
-    private final Resource resource;
+    @Value("${google.credentials}")
+    private String googleCredentialsJson;
 
-    public GoogleSheetsAdapter(@Value("classpath:credentials/credentials.json") Resource resource) {
-        this.resource = resource;
+    private GoogleCredentials getCredentials() throws IOException {
+        return GoogleCredentials.fromStream(
+                new ByteArrayInputStream(googleCredentialsJson.getBytes(StandardCharsets.UTF_8))
+        ).createScoped(Collections.singleton(SheetsScopes.SPREADSHEETS));
     }
 
     public Sheets getSheetsService() throws IOException, GeneralSecurityException {
-        GoogleCredentials credentials = GoogleCredentials.fromStream(resource.getInputStream())
-                .createScoped(Collections.singleton(SheetsScopes.SPREADSHEETS));
-
         return new Sheets.Builder(
                 GoogleNetHttpTransport.newTrustedTransport(),
                 GsonFactory.getDefaultInstance(),
-                new HttpCredentialsAdapter(credentials)
+                new HttpCredentialsAdapter(getCredentials())
         ).setApplicationName("casa-ahun-dev")
                 .build();
     }
