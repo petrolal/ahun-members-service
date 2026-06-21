@@ -13,17 +13,16 @@ public class Member {
     private LocalDate birthday;
     private int monthBirthday;
 
-    public Member(UUID uuid, String memberName, String email, LocalDate birthday, int monthBirthday) {
+    public Member(UUID uuid, String memberName, String email, LocalDate birthday, LocalDateTime createdAt) {
         this.uuid = uuid;
         this.memberName = memberName;
         this.email = email;
         this.birthday = birthday;
-        this.createdAt = LocalDateTime.now();
-        this.monthBirthday = monthBirthday;
-        validar();
+        this.createdAt = createdAt;
+        validate();
     }
 
-    private void validar() {
+    private void validate() {
         if (memberName == null || memberName.isBlank()) {
             throw new IllegalArgumentException("memberName cannot be empty.");
         }
@@ -67,13 +66,5 @@ public class Member {
 
     public void setBirthday(LocalDate birthday) {
         this.birthday = birthday;
-    }
-
-    public int getMonthBirthday() {
-        return monthBirthday;
-    }
-
-    public void setMonthBirthday(int monthBirthday) {
-        this.monthBirthday = monthBirthday;
     }
 }
