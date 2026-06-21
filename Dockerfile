@@ -19,4 +19,4 @@ COPY --from=builder /app/build/libs/*.jar app.jar
 # Define user with right groups
 RUN addgroup -S ahun && adduser -S ahun -G ahun
 USER ahun
-ENTRYPOINT ["sh", "-c", "ping -c 4 google.com && java -Xmx256m -jar app.jar"]
+ENTRYPOINT ["sh", "-c", "echo 'URL IS: '$SPRING_DATASOURCE_URL && java -Xmx256m -jar app.jar"]
