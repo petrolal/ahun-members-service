@@ -19,11 +19,4 @@ COPY --from=builder /app/build/libs/*.jar app.jar
 # Define user with right groups
 RUN addgroup -S ahun && adduser -S ahun -G ahun
 USER ahun
-ENTRYPOINT ["sh", "-c", "java \
-  -Dspring.datasource.url=$SPRING_DATASOURCE_URL \
-  -Dspring.datasource.username=$SPRING_DATASOURCE_USERNAME \
-  -Dspring.datasource.password=$SPRING_DATASOURCE_PASSWORD \
-  -Dtelegram.bot-token=$TELEGRAM_BOT_TOKEN \
-  -Dtelegram.chat-id=$TELEGRAM_CHAT_ID \
-  -Dgoogle.credentials=$GOOGLE_CREDENTIALS \
-  -Xmx256m -jar app.jar"]
+ENTRYPOINT ["sh", "-c", "java -Xmx256m -jar app.jar"]
