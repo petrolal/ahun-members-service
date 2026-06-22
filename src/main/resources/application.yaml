@@ -7,7 +7,7 @@ spring:
     name: ahun-members-service
 
   datasource:
-    url: ${SPRING_DATASOURCE_URL:jdbc:postgresql://db.phhqoebohkenvvdciapc.supabase.co:5432/postgres?sslmode=require&preferIPv4Stack=true}
+    url: ${SPRING_DATASOURCE_URL}
     username: ${SPRING_DATASOURCE_USERNAME}
     password: ${SPRING_DATASOURCE_PASSWORD}
     driver-class-name: org.postgresql.Driver
