@@ -7,9 +7,9 @@ spring:
     name: ahun-members-service
 
   datasource:
-    url: jdbc:postgresql://db.phhqoebohkenvvdciapc.supabase.co:5432/postgres?sslmode=require&preferIPv4Stack=true
-    username: postgres
-    password: 07NdvHA6oGadn9dQ
+    url: ${SPRING_DATASOURCE_URL:jdbc:postgresql://db.phhqoebohkenvvdciapc.supabase.co:5432/postgres?sslmode=require&preferIPv4Stack=true}
+    username: ${SPRING_DATASOURCE_USERNAME}
+    password: ${SPRING_DATASOURCE_PASSWORD}
     driver-class-name: org.postgresql.Driver
     hikari:
       maximum-pool-size: 5
