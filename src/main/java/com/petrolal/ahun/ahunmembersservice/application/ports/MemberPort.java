@@ -10,4 +10,6 @@ public interface MemberPort {
 
     List<Member> getMembersByCurrentMonth();
 
+    List<Member> getBirthdaysByMonthAndDate();
+
 }

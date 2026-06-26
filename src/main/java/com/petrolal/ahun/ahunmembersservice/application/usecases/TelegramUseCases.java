@@ -13,6 +13,7 @@ import java.time.format.DateTimeFormatterBuilder;
 import java.time.format.TextStyle;
 import java.util.List;
 import java.util.Locale;
+import java.util.Optional;
 
 public class TelegramUseCases implements TelegramPort {
 
@@ -26,12 +27,19 @@ public class TelegramUseCases implements TelegramPort {
         this.memberPort = memberPort;
     }
 
-    private String convertMemberCurrentMonthToTelegram() {
-        List<Member> members = memberPort.getMembersByCurrentMonth();
+    private String convertMemberCurrentMonthToTelegram(Boolean daily) {
+        List<Member> members;
+
+        if (daily) {
+            members = memberPort.getBirthdaysByMonthAndDate();
+        } else {
+            members = memberPort.getMembersByCurrentMonth();
+        }
+
         String currentMonth = getMonthName(LocalDate.now().getMonthValue());
         StringBuilder sb = new StringBuilder();
 
-        String message = String.format("\uD83C\uDF89 Aniversáriantes de %s \n\n", currentMonth);
+        String message = String.format("\uD83C\uDF89 Aniversáriantes de %s \n\n", daily ? currentMonth : "Hoje");
         sb.append(message);
 
         members.forEach(member -> {
@@ -59,8 +67,12 @@ public class TelegramUseCases implements TelegramPort {
     }
 
     @Override
-    public TelegramResponseDto sendMessage() {
-        return telegramAdapter.sendMessage(telegramAdapter, convertMemberCurrentMonthToTelegram());
+    public TelegramResponseDto sendMonthlyMessage() {
+        return telegramAdapter.sendMessage(telegramAdapter, convertMemberCurrentMonthToTelegram(false));
     }
 
+    @Override
+    public TelegramResponseDto sendDailyMessage() {
+        return telegramAdapter.sendMessage(telegramAdapter, convertMemberCurrentMonthToTelegram(true));
+    }
 }

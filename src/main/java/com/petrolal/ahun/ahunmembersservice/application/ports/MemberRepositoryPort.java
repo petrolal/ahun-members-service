@@ -11,6 +11,8 @@ public interface MemberRepositoryPort {
 
     List<Member> findByMonth(int monthValue);
 
+    List<Member> findByMonthAndDay(int month, int day);
+
     void deleteAll();
     List<MemberEntity> saveAll(List<MemberEntity> members);
 

@@ -3,8 +3,11 @@ package com.petrolal.ahun.ahunmembersservice.infrastructure.adapters.in.webresou
 import com.petrolal.ahun.ahunmembersservice.application.ports.MemberPort;
 import com.petrolal.ahun.ahunmembersservice.domain.model.Member;
 import io.swagger.v3.oas.annotations.tags.Tag;
+import org.springframework.data.jpa.repository.Query;
+import org.springframework.data.repository.query.Param;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.util.List;
@@ -26,7 +29,11 @@ public class MemberWebResource {
     }
 
     @GetMapping("current")
-    public List<Member> getCurrentMonthBirthdays() {
+    public List<Member> getCurrentMonthBirthdays(@RequestParam Boolean today) {
+        if (today) {
+            return memberPort.getBirthdaysByMonthAndDate();
+        }
+
         return memberPort.getMembersByCurrentMonth();
     }
 

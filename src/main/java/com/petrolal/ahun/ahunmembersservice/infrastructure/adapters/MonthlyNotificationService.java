@@ -16,6 +16,11 @@ public class MonthlyNotificationService {
 //    @Scheduled(cron = "0 * * * * ?")
     @Scheduled(cron = "0 0 9 1 * ?", zone = "America/Sao_Paulo")
     public void sendMonthlyMembersNotification() {
-        telegramPort.sendMessage();
+        telegramPort.sendMonthlyMessage();
+    }
+
+    @Scheduled(cron = "0 0 8 * * *", zone = "America/Sao_Paulo")
+    public void checkBirthdaysEveryDay() {
+        telegramPort.sendDailyMessage();
     }
 }

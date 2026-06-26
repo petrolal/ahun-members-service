@@ -1,9 +1,11 @@
 package com.petrolal.ahun.ahunmembersservice.infrastructure.adapters.in.webresource;
 
 import com.petrolal.ahun.ahunmembersservice.application.ports.TelegramPort;
+import com.petrolal.ahun.ahunmembersservice.domain.dto.SendMessageDto;
 import com.petrolal.ahun.ahunmembersservice.domain.dto.TelegramResponseDto;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -19,8 +21,12 @@ public class TelegramWebResource {
     }
 
     @PostMapping("send")
-    TelegramResponseDto sendMessage() {
-        return telegramPort.sendMessage();
+    TelegramResponseDto sendMessage(@RequestBody SendMessageDto sendMessageDto) {
+        if (sendMessageDto.daily()) {
+            return telegramPort.sendDailyMessage();
+        }
+
+        return telegramPort.sendMonthlyMessage();
     }
 
 }

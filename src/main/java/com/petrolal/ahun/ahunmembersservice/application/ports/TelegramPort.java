@@ -4,6 +4,8 @@ import com.petrolal.ahun.ahunmembersservice.domain.dto.TelegramResponseDto;
 
 public interface TelegramPort {
 
-    TelegramResponseDto sendMessage();
+    TelegramResponseDto sendMonthlyMessage();
+
+    TelegramResponseDto sendDailyMessage();
 
 }

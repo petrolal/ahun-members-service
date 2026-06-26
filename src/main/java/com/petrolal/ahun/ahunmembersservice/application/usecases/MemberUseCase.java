@@ -26,4 +26,10 @@ public class MemberUseCase implements MemberPort {
         return memberRepositoryPort.findByMonth(monthValue);
     }
 
+    @Override
+    public List<Member> getBirthdaysByMonthAndDate() {
+        int dayValue = LocalDate.now().getDayOfMonth();
+        int  monthValue = LocalDate.now().getMonthValue();
+        return memberRepositoryPort.findByMonthAndDay(monthValue, dayValue);
+    }
 }

@@ -41,4 +41,13 @@ public class MemberRepository implements MemberRepositoryPort {
     public List<MemberEntity> saveAll(List<MemberEntity> members) {
         return repository.saveAll(members);
     }
+
+    @Override
+    public List<Member> findByMonthAndDay(int month, int day) {
+        return repository.findByDayAndMonth(month, day)
+                .stream()
+                .map(MemberEntity::toDomain)
+                .toList();
+    }
+
 }
