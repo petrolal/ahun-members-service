@@ -13,7 +13,6 @@ public class MonthlyNotificationService {
         this.telegramPort = telegramPort;
     }
 
-//    @Scheduled(cron = "0 * * * * ?")
     @Scheduled(cron = "0 0 9 1 * ?", zone = "America/Sao_Paulo")
     public void sendMonthlyMembersNotification() {
         telegramPort.sendMonthlyMessage();

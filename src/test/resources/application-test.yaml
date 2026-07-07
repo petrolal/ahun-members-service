@@ -1,0 +1,24 @@
+spring:
+  datasource:
+    url: jdbc:h2:mem:testdb;MODE=PostgreSQL;DB_CLOSE_DELAY=-1
+    username: sa
+    password:
+    driver-class-name: org.h2.Driver
+  jpa:
+    hibernate:
+      ddl-auto: create-drop
+    properties:
+      hibernate:
+        dialect: org.hibernate.dialect.H2Dialect
+  flyway:
+    enabled: false
+  docker:
+    compose:
+      enabled: false
+
+telegram:
+  bot-token: test-bot-token
+  chat-id: test-chat-id
+
+google:
+  credentials: '{"type": "service_account", "project_id": "test-project"}'
