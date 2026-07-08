@@ -1,6 +1,6 @@
-package com.petrolal.ahun.ahunmembersservice.infrastructure.adapters.out.persistence.repository;
+package com.petrolal.ahun.ahunmembersservice.infrastructure.adapters.persistence.repository;
 
-import com.petrolal.ahun.ahunmembersservice.infrastructure.adapters.out.persistence.entity.MemberEntity;
+import com.petrolal.ahun.ahunmembersservice.infrastructure.adapters.persistence.entity.MemberEntity;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.data.jpa.test.autoconfigure.DataJpaTest;

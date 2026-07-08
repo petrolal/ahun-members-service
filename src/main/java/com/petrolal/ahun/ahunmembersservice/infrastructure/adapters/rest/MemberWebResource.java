@@ -1,10 +1,8 @@
-package com.petrolal.ahun.ahunmembersservice.infrastructure.adapters.in.webresource;
+package com.petrolal.ahun.ahunmembersservice.infrastructure.adapters.rest;
 
 import com.petrolal.ahun.ahunmembersservice.application.ports.MemberPort;
 import com.petrolal.ahun.ahunmembersservice.domain.model.Member;
 import io.swagger.v3.oas.annotations.tags.Tag;
-import org.springframework.data.jpa.repository.Query;
-import org.springframework.data.repository.query.Param;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;

@@ -1,4 +1,4 @@
-package com.petrolal.ahun.ahunmembersservice.infrastructure.adapters.out.persistence.externalapis;
+package com.petrolal.ahun.ahunmembersservice.infrastructure.adapters.persistence.externalapis;
 
 import com.petrolal.ahun.ahunmembersservice.application.ports.TelegramSenderPort;
 import com.petrolal.ahun.ahunmembersservice.domain.dto.TelegramMessageRequestDto;

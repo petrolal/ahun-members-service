@@ -1,8 +1,8 @@
-package com.petrolal.ahun.ahunmembersservice.infrastructure.adapters.out.persistence.repository;
+package com.petrolal.ahun.ahunmembersservice.infrastructure.adapters.persistence.repository;
 
 import com.petrolal.ahun.ahunmembersservice.application.ports.MemberRepositoryPort;
 import com.petrolal.ahun.ahunmembersservice.domain.model.Member;
-import com.petrolal.ahun.ahunmembersservice.infrastructure.adapters.out.persistence.entity.MemberEntity;
+import com.petrolal.ahun.ahunmembersservice.infrastructure.adapters.persistence.entity.MemberEntity;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;

@@ -1,4 +1,4 @@
-package com.petrolal.ahun.ahunmembersservice.infrastructure.adapters.out.persistence.entity;
+package com.petrolal.ahun.ahunmembersservice.infrastructure.adapters.persistence.entity;
 
 import com.petrolal.ahun.ahunmembersservice.domain.model.Member;
 import jakarta.persistence.*;

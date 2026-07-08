@@ -1,4 +1,4 @@
-package com.petrolal.ahun.ahunmembersservice.infrastructure.adapters.in.webresource;
+package com.petrolal.ahun.ahunmembersservice.infrastructure.adapters.rest;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.petrolal.ahun.ahunmembersservice.application.ports.TelegramPort;

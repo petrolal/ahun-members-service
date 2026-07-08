@@ -1,7 +1,6 @@
-package com.petrolal.ahun.ahunmembersservice.infrastructure.adapters.out.persistence.repository;
+package com.petrolal.ahun.ahunmembersservice.infrastructure.adapters.persistence.repository;
 
-import com.petrolal.ahun.ahunmembersservice.infrastructure.adapters.out.persistence.entity.MemberEntity;
-import org.springframework.data.domain.Limit;
+import com.petrolal.ahun.ahunmembersservice.infrastructure.adapters.persistence.entity.MemberEntity;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;

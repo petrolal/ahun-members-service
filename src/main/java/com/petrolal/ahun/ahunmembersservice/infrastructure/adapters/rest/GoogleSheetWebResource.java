@@ -1,4 +1,4 @@
-package com.petrolal.ahun.ahunmembersservice.infrastructure.adapters.in.webresource;
+package com.petrolal.ahun.ahunmembersservice.infrastructure.adapters.rest;
 
 import com.petrolal.ahun.ahunmembersservice.application.ports.GoogleSheetPort;
 import com.petrolal.ahun.ahunmembersservice.domain.model.Member;

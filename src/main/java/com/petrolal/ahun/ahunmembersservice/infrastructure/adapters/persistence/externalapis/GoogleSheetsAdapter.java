@@ -1,4 +1,4 @@
-package com.petrolal.ahun.ahunmembersservice.infrastructure.adapters.out.persistence.externalapis;
+package com.petrolal.ahun.ahunmembersservice.infrastructure.adapters.persistence.externalapis;
 
 import com.google.api.client.googleapis.javanet.GoogleNetHttpTransport;
 import com.google.api.client.json.gson.GsonFactory;
