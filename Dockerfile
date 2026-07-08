@@ -19,4 +19,4 @@ COPY --from=builder /app/build/libs/*.jar app.jar
 # Define user with right groups
 RUN addgroup -S ahun && adduser -S ahun -G ahun
 USER ahun
-ENTRYPOINT ["sh", "-c", "java -Xmx256m -jar app.jar"]
+ENTRYPOINT ["java", "-XX:+UseSerialGC", "-XX:TieredStopAtLevel=1", "-Xss256k", "-Xms32m", "-Xmx192m", "-jar", "app.jar"]
