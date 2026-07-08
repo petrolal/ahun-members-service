@@ -1,7 +1,6 @@
 package com.petrolal.ahun.ahunmembersservice.application.ports;
 
 import com.petrolal.ahun.ahunmembersservice.domain.model.Member;
-import com.petrolal.ahun.ahunmembersservice.infrastructure.adapters.out.persistence.entity.MemberEntity;
 
 import java.util.List;
 
@@ -14,6 +13,6 @@ public interface MemberRepositoryPort {
     List<Member> findByMonthAndDay(int month, int day);
 
     void deleteAll();
-    List<MemberEntity> saveAll(List<MemberEntity> members);
+    List<Member> saveAll(List<Member> members);
 
 }

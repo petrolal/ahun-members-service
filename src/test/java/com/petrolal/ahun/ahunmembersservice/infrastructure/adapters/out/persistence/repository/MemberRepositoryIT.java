@@ -51,9 +51,9 @@ class MemberRepositoryIT {
 
     @Test
     void shouldSaveAll() {
-        MemberEntity entity = new MemberEntity("john@example.com", "John Doe", LocalDate.of(1990, 6, 15), LocalDateTime.now());
+        Member member = new Member(null, "John Doe", "john@example.com", LocalDate.of(1990, 6, 15), LocalDateTime.now());
 
-        memberRepository.saveAll(List.of(entity));
+        memberRepository.saveAll(List.of(member));
 
         assertThat(springRepository.findAll()).hasSize(1);
     }

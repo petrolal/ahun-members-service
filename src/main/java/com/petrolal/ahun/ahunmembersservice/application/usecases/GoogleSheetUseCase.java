@@ -1,66 +1,44 @@
 package com.petrolal.ahun.ahunmembersservice.application.usecases;
 
-import com.google.api.services.sheets.v4.model.ValueRange;
 import com.petrolal.ahun.ahunmembersservice.application.ports.GoogleSheetPort;
 import com.petrolal.ahun.ahunmembersservice.application.ports.MemberRepositoryPort;
+import com.petrolal.ahun.ahunmembersservice.application.ports.SheetsReaderPort;
 import com.petrolal.ahun.ahunmembersservice.domain.model.Member;
 import com.petrolal.ahun.ahunmembersservice.domain.dto.MemberFromSheetDto;
-import com.petrolal.ahun.ahunmembersservice.infrastructure.adapters.out.persistence.entity.MemberEntity;
-import com.petrolal.ahun.ahunmembersservice.infrastructure.adapters.out.persistence.externalapis.GoogleSheetsAdapter;
 
-import java.util.ArrayList;
 import java.util.List;
 
 public class GoogleSheetUseCase implements GoogleSheetPort {
 
-    private final GoogleSheetsAdapter googleSheetsAdapter;
+    private final SheetsReaderPort sheetsReaderPort;
     private final MemberRepositoryPort memberRepositoryPort;
 
-    public GoogleSheetUseCase(GoogleSheetsAdapter googleSheetsAdapter,
+    public GoogleSheetUseCase(SheetsReaderPort sheetsReaderPort,
                               MemberRepositoryPort memberRepositoryPort) {
-        this.googleSheetsAdapter = googleSheetsAdapter;
+        this.sheetsReaderPort = sheetsReaderPort;
         this.memberRepositoryPort = memberRepositoryPort;
     }
 
     @Override
     public List<MemberFromSheetDto> readMemberSheet() {
-        try {
-            ValueRange response = googleSheetsAdapter.getSheetsService()
-                    .spreadsheets()
-                    .values()
-                    .get("1iaqNClSz0DLH1xu7SDpe-WmpL6-aZcC_Edp3TSAPlEM", "Form Responses 1!A:D")
-                    .execute();
-
-            return response.getValues()
-                    .stream()
-                    .skip(1)
-                    .map(MemberFromSheetDto::fromRow)
-                    .toList();
-        } catch (Exception e) {
-            throw new RuntimeException(e);
-        }
+        return sheetsReaderPort.readMemberSheet();
     }
 
     @Override
     public List<Member> syncSheet() {
         List<MemberFromSheetDto> response = this.readMemberSheet();
-        List<MemberEntity> entity = new ArrayList<>();
 
-        for (MemberFromSheetDto i : response) {
-            entity.add(
-                    new MemberEntity(
-                            i.email(),
-                            i.member_name(),
-                            i.birthday(),
-                            i.createdAt()
-                    )
-            );
-        }
+        List<Member> members = response.stream()
+                .map(i -> new Member(
+                        null,
+                        i.member_name(),
+                        i.email(),
+                        i.birthday(),
+                        i.createdAt()
+                ))
+                .toList();
 
         memberRepositoryPort.deleteAll();
-        return memberRepositoryPort.saveAll(entity)
-                .stream()
-                .map(MemberEntity::toDomain)
-                .toList();
+        return memberRepositoryPort.saveAll(members);
     }
 }

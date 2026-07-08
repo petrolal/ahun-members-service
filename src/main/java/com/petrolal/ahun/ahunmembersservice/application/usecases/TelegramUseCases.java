@@ -2,9 +2,9 @@ package com.petrolal.ahun.ahunmembersservice.application.usecases;
 
 import com.petrolal.ahun.ahunmembersservice.application.ports.MemberPort;
 import com.petrolal.ahun.ahunmembersservice.application.ports.TelegramPort;
+import com.petrolal.ahun.ahunmembersservice.application.ports.TelegramSenderPort;
 import com.petrolal.ahun.ahunmembersservice.domain.dto.TelegramResponseDto;
 import com.petrolal.ahun.ahunmembersservice.domain.model.Member;
-import com.petrolal.ahun.ahunmembersservice.infrastructure.adapters.out.persistence.externalapis.TelegramAdapter;
 
 import java.time.LocalDate;
 import java.time.Month;
@@ -13,17 +13,16 @@ import java.time.format.DateTimeFormatterBuilder;
 import java.time.format.TextStyle;
 import java.util.List;
 import java.util.Locale;
-import java.util.Optional;
 
 public class TelegramUseCases implements TelegramPort {
 
-    private final TelegramAdapter telegramAdapter;
+    private final TelegramSenderPort telegramSenderPort;
     private final MemberPort memberPort;
 
     private final static DateTimeFormatter outFormat = DateTimeFormatter.ofPattern("d/M/yyyy");
 
-    public TelegramUseCases(TelegramAdapter telegramAdapter, MemberPort memberPort) {
-        this.telegramAdapter = telegramAdapter;
+    public TelegramUseCases(TelegramSenderPort telegramSenderPort, MemberPort memberPort) {
+        this.telegramSenderPort = telegramSenderPort;
         this.memberPort = memberPort;
     }
 
@@ -68,11 +67,11 @@ public class TelegramUseCases implements TelegramPort {
 
     @Override
     public TelegramResponseDto sendMonthlyMessage() {
-        return telegramAdapter.sendMessage(telegramAdapter, convertMemberCurrentMonthToTelegram(false));
+        return telegramSenderPort.sendNotification(convertMemberCurrentMonthToTelegram(false));
     }
 
     @Override
     public TelegramResponseDto sendDailyMessage() {
-        return telegramAdapter.sendMessage(telegramAdapter, convertMemberCurrentMonthToTelegram(true));
+        return telegramSenderPort.sendNotification(convertMemberCurrentMonthToTelegram(true));
     }
 }

@@ -38,8 +38,20 @@ public class MemberRepository implements MemberRepositoryPort {
     }
 
     @Override
-    public List<MemberEntity> saveAll(List<MemberEntity> members) {
-        return repository.saveAll(members);
+    public List<Member> saveAll(List<Member> members) {
+        List<MemberEntity> entities = members.stream()
+                .map(m -> new MemberEntity(
+                        m.getEmail(),
+                        m.getMemberName(),
+                        m.getBirthday(),
+                        m.getCreatedAt()
+                ))
+                .toList();
+
+        return repository.saveAll(entities)
+                .stream()
+                .map(MemberEntity::toDomain)
+                .toList();
     }
 
     @Override
