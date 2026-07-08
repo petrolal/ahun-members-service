@@ -4,7 +4,7 @@ Ahun Members Service is a serverless Java 25 / Spring Boot 4.x application desig
 
 ---
 
-## 🚀 Features
+## Features
 
 *   **Google Sheets Integration:** Reads and parses member records directly from a Google Sheet.
 *   **Telegram Bot Integration:** Sends customized daily birthday lists and monthly announcements.
@@ -16,7 +16,7 @@ Ahun Members Service is a serverless Java 25 / Spring Boot 4.x application desig
 
 ---
 
-## 🛠️ API Endpoints
+## API Endpoints
 
 ### Trigger Message Jobs
 *   **URL:** `POST /api/messaging/send`
@@ -33,7 +33,7 @@ Ahun Members Service is a serverless Java 25 / Spring Boot 4.x application desig
 
 ---
 
-## ⚙️ Configuration (Environment Variables)
+## Configuration (Environment Variables)
 
 Set up the following variables in your `.env` file (for local development) or container environment:
 
@@ -48,7 +48,7 @@ Set up the following variables in your `.env` file (for local development) or co
 
 ---
 
-## 💻 Local Development
+## Local Development
 
 For local development, the repository includes a `compose.yaml` to spin up a local PostgreSQL database.
 
@@ -80,7 +80,7 @@ docker compose up -d
 
 ---
 
-## ☁️ Deployment
+## Deployment
 
 To deploy this application to Google Cloud Platform, use the Terraform configurations located in the IaC repository:
 👉 [GCP Terraform Configuration Guide](file:///home/petrolal/Projects/IaC/ahun/README.md)
