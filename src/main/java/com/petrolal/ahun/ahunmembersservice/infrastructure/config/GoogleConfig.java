@@ -20,8 +20,16 @@ public class GoogleConfig {
 
     @PostConstruct
     public void testCredentials() throws IOException {
-        if (googleCredentialsJson == null || googleCredentialsJson.trim().isEmpty()) {
-            throw new IllegalStateException("Google credentials environment variable (GOOGLE_CREDENTIALS) is missing or empty");
+        if (googleCredentialsJson == null || googleCredentialsJson.trim().isEmpty() || "DEFAULT_GCP".equals(googleCredentialsJson.trim())) {
+            try {
+                GoogleCredentials credentials = GoogleCredentials.getApplicationDefault();
+                if (credentials == null) {
+                    throw new IllegalStateException("Both google.credentials and Application Default Credentials are missing");
+                }
+                return;
+            } catch (IOException e) {
+                throw new IllegalStateException("Google credentials environment variable is empty and Application Default Credentials are not available", e);
+            }
         }
         if (googleCredentialsJson.contains("test-project")) {
             return;

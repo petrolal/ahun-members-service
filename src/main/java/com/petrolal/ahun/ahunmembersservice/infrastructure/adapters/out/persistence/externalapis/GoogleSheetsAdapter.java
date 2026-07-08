@@ -22,6 +22,10 @@ public class GoogleSheetsAdapter {
     private String googleCredentialsJson;
 
     private GoogleCredentials getCredentials() throws IOException {
+        if (googleCredentialsJson == null || googleCredentialsJson.trim().isEmpty() || "DEFAULT_GCP".equals(googleCredentialsJson.trim())) {
+            return GoogleCredentials.getApplicationDefault()
+                    .createScoped(Collections.singleton(SheetsScopes.SPREADSHEETS));
+        }
         return GoogleCredentials.fromStream(
                 new ByteArrayInputStream(googleCredentialsJson.getBytes(StandardCharsets.UTF_8))
         ).createScoped(Collections.singleton(SheetsScopes.SPREADSHEETS));
