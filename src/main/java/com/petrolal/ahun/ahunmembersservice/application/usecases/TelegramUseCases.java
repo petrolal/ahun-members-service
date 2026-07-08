@@ -38,7 +38,7 @@ public class TelegramUseCases implements TelegramPort {
         String currentMonth = getMonthName(LocalDate.now().getMonthValue());
         StringBuilder sb = new StringBuilder();
 
-        String message = String.format("\uD83C\uDF89 Aniversáriantes de %s \n\n", daily ? currentMonth : "Hoje");
+        String message = String.format("\uD83C\uDF89 Aniversáriantes de %s \n\n", daily ? "Hoje" : currentMonth);
         sb.append(message);
 
         members.forEach(member -> {
