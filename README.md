@@ -82,5 +82,33 @@ docker compose up -d
 
 ## Deployment
 
-To deploy this application to Google Cloud Platform, use the Terraform configurations located in the IaC repository:
-👉 [GCP Terraform Configuration Guide](file:///home/petrolal/Projects/IaC/ahun/README.md)
+To deploy this application to Google Cloud Platform, you will use the Terraform configurations located in the IaC repository.
+
+### Step-by-Step Deployment Guide
+
+1. **Initialize and Provision the Artifact Registry:**
+   Before the Cloud Run service can pull the container image, the registry must exist. Navigate to the IaC repository (`~/Projects/IaC/ahun`) and run:
+   ```bash
+   terraform init
+   terraform apply -target=module.cloud_run.google_artifact_registry_repository.repo
+   ```
+
+2. **Build and Push the App Image using Cloud Build:**
+   Compile and package the application container directly in the cloud (free tier eligible) using Cloud Build. Run the following command from this directory:
+   ```bash
+   gcloud builds submit --tag us-central1-docker.pkg.dev/casa-ahun/ahun-members-service-repo/ahun-members-service:latest .
+   ```
+
+3. **Deploy the Cloud Run Service and Scheduler:**
+   Once the Docker image has been successfully pushed, return to the IaC repository (`~/Projects/IaC/ahun`) and deploy the rest of the resources:
+   ```bash
+   terraform apply
+   ```
+
+> [!NOTE]
+> If you encounter a `409 Conflict` error during the scheduler creation (because the scheduler jobs already exist in the GCP project from a previous run or attempt but are missing from the local Terraform state), import them with the following commands and re-apply:
+> ```bash
+> terraform import module.cloud_run.google_cloud_scheduler_job.daily_birthday_job projects/casa-ahun/locations/us-central1/jobs/ahun-members-service-daily-bday
+> terraform import module.cloud_run.google_cloud_scheduler_job.monthly_notification_job projects/casa-ahun/locations/us-central1/jobs/ahun-members-service-monthly-notif
+> ```
+
