@@ -52,7 +52,8 @@ class TelegramUseCasesTest {
         ArgumentCaptor<String> messageCaptor = ArgumentCaptor.forClass(String.class);
         verify(telegramSenderPort).sendNotification(messageCaptor.capture());
         String message = messageCaptor.getValue();
-        assertThat(message).contains("Aniversáriantes de Hoje"); // Due to the implementation's daily ? month : "Hoje"
+        String currentMonthName = telegramUseCases.getMonthName(LocalDate.now().getMonthValue());
+        assertThat(message).contains("Aniversáriantes de " + currentMonthName);
         assertThat(message).contains("Alice - 15/6/1995");
     }
 
@@ -71,8 +72,7 @@ class TelegramUseCasesTest {
         ArgumentCaptor<String> messageCaptor = ArgumentCaptor.forClass(String.class);
         verify(telegramSenderPort).sendNotification(messageCaptor.capture());
         String message = messageCaptor.getValue();
-        String currentMonthName = telegramUseCases.getMonthName(LocalDate.now().getMonthValue());
-        assertThat(message).contains("Aniversáriantes de " + currentMonthName); // Due to the implementation's daily ? month : "Hoje"
+        assertThat(message).contains("Aniversáriantes de Hoje");
         assertThat(message).contains("Bob - 28/6/1990");
     }
 
