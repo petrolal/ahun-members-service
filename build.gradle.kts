@@ -6,7 +6,8 @@ plugins {
 }
 
 group = "com.petrolal.commons.telegram"
-version = "1.0.0"
+val rawVersion = System.getenv("VERSION") ?: (project.findProperty("version") as? String) ?: "0.0.1-SNAPSHOT"
+version = rawVersion.removePrefix("v")
 description = "commons-telegram"
 
 publishing {
