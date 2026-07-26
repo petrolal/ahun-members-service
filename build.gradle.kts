@@ -5,7 +5,7 @@ plugins {
     alias(libs.plugins.spring.dependency.management)
 }
 
-group = "com.petrolal.commons.telegram"
+group = "com.petrolal.ahun.members"
 val rawVersion = System.getenv("VERSION") ?: (project.findProperty("version") as? String) ?: "0.0.1-SNAPSHOT"
 version = rawVersion.removePrefix("v")
 description = "ahun-members-service"
