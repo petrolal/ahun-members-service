@@ -1,33 +1,54 @@
 plugins {
     java
+    `maven-publish`
     alias(libs.plugins.spring.boot)
     alias(libs.plugins.spring.dependency.management)
 }
 
 group = "com.petrolal.ahun"
-version = "0.0.1-SNAPSHOT"
-description = "ahun-members-service"
+version = "1.0.0"
+description = "commons-telegram"
+
+publishing {
+    publications {
+        create<MavenPublication>("mavenJava") {
+            from(components["java"])
+        }
+    }
+    repositories {
+        maven {
+            name = "GitHubPackages"
+            url = uri("https://maven.pkg.github.com/petrolal/commons-telegram")
+            credentials {
+                username = System.getenv("GITHUB_ACTOR") ?: ""
+                password = System.getenv("GITHUB_TOKEN") ?: ""
+            }
+        }
+    }
+}
 
 java {
     toolchain {
-        languageVersion = JavaLanguageVersion.of(25)
+        languageVersion = JavaLanguageVersion.of(21)
     }
 }
 
 repositories {
+    mavenLocal()
     mavenCentral()
+    maven {
+        url = uri("https://maven.pkg.github.com/petrolal/*")
+        credentials {
+            username = System.getenv("GITHUB_ACTOR")
+            password = System.getenv("GITHUB_TOKEN")
+        }
+    }
 }
 
 dependencies {
-    implementation(libs.spring.boot.starter.data.jpa)
-    implementation(libs.spring.boot.starter.webmvc)
+    implementation(libs.petrolal.commons.telegram)
+    implementation(libs.petrolal.commons.web)
 
-    implementation(libs.spring.boot.starter.flyway)
-
-    implementation(libs.flyway.core)
-    implementation(libs.springdoc.openapi.starter.webmvc.ui)
-
-    runtimeOnly(libs.flyway.database.postgresql)
     runtimeOnly(libs.postgresql)
 
     implementation(libs.google.api.client)
@@ -39,8 +60,6 @@ dependencies {
     developmentOnly(libs.spring.boot.devtools)
     developmentOnly(libs.spring.boot.docker.compose)
     testImplementation(libs.spring.boot.starter.test)
-    testImplementation(libs.spring.boot.starter.webmvc.test)
-    testImplementation(libs.spring.boot.starter.data.jpa.test)
     testRuntimeOnly(libs.junit.platform.launcher)
     testRuntimeOnly(libs.h2)
 }

@@ -3,13 +3,13 @@ package com.petrolal.ahun.ahunmembersservice.infrastructure.adapters.rest;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.petrolal.ahun.ahunmembersservice.application.ports.TelegramPort;
 import com.petrolal.ahun.ahunmembersservice.domain.dto.SendMessageDto;
-import com.petrolal.ahun.ahunmembersservice.domain.dto.TelegramResponseDto;
+import com.petrolal.commons.telegram.domain.dto.TelegramResponseDto;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.webmvc.test.autoconfigure.WebMvcTest;
+import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
+import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.MediaType;
 import org.springframework.test.context.ActiveProfiles;
-import org.springframework.test.context.bean.override.mockito.MockitoBean;
 import org.springframework.test.web.servlet.MockMvc;
 
 import static org.mockito.Mockito.when;
@@ -26,7 +26,7 @@ class TelegramWebResourceIT {
 
     private final ObjectMapper objectMapper = new ObjectMapper();
 
-    @MockitoBean
+    @MockBean
     private TelegramPort telegramPort;
 
     @Test

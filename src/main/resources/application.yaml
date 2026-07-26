@@ -4,7 +4,7 @@ spring:
       enabled: false
 
   application:
-    name: ahun-members-service
+    name: commons-telegram
 
   datasource:
     url: ${SPRING_DATASOURCE_URL}
@@ -24,4 +24,12 @@ telegram:
 
 google:
   credentials: ${GOOGLE_CREDENTIALS}
+
+petrolal:
+  commons:
+    web:
+      swagger:
+        title: Ahun Members Service
+        description: Service to manage members
+        version: "1.0"
 

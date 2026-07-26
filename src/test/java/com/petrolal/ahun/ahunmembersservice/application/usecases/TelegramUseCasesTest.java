@@ -1,8 +1,8 @@
 package com.petrolal.ahun.ahunmembersservice.application.usecases;
 
 import com.petrolal.ahun.ahunmembersservice.application.ports.MemberPort;
-import com.petrolal.ahun.ahunmembersservice.application.ports.TelegramSenderPort;
-import com.petrolal.ahun.ahunmembersservice.domain.dto.TelegramResponseDto;
+import com.petrolal.commons.telegram.application.ports.TelegramSenderPort;
+import com.petrolal.commons.telegram.domain.dto.TelegramResponseDto;
 import com.petrolal.ahun.ahunmembersservice.domain.model.Member;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;

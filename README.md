@@ -1,6 +1,6 @@
-# Ahun Members Service
+# Commons Telegram
 
-Ahun Members Service is a serverless Java 25 / Spring Boot 4.x application designed to synchronize member records from a Google Sheets spreadsheet into a PostgreSQL database, sending automated daily birthday greetings and monthly notifications to a Telegram chat.
+Commons Telegram is a serverless Java 25 / Spring Boot 4.x application designed to synchronize member records from a Google Sheets spreadsheet into a PostgreSQL database, sending automated daily birthday greetings and monthly notifications to a Telegram chat.
 
 ---
 
@@ -55,7 +55,7 @@ For local development, the repository includes a `compose.yaml` to spin up a loc
 ### 1. Configure local variables
 Create a `.env` file in the root directory:
 ```env
-SPRING_DATASOURCE_URL=jdbc:postgresql://localhost:5432/ahun_members_service
+SPRING_DATASOURCE_URL=jdbc:postgresql://localhost:5432/commons_telegram
 SPRING_DATASOURCE_USERNAME=ahun
 SPRING_DATASOURCE_PASSWORD=ahun
 TELEGRAM_BOT_TOKEN=your_dev_token
@@ -96,7 +96,7 @@ To deploy this application to Google Cloud Platform, you will use the Terraform 
 2. **Build and Push the App Image using Cloud Build:**
    Compile and package the application container directly in the cloud (free tier eligible) using Cloud Build. Run the following command from this directory:
    ```bash
-   gcloud builds submit --tag us-central1-docker.pkg.dev/casa-ahun/ahun-members-service-repo/ahun-members-service:latest .
+   gcloud builds submit --tag us-central1-docker.pkg.dev/casa-ahun/commons-telegram-repo/commons-telegram:latest .
    ```
 
 3. **Deploy the Cloud Run Service and Scheduler:**
@@ -108,7 +108,7 @@ To deploy this application to Google Cloud Platform, you will use the Terraform 
 > [!NOTE]
 > If you encounter a `409 Conflict` error during the scheduler creation (because the scheduler jobs already exist in the GCP project from a previous run or attempt but are missing from the local Terraform state), import them with the following commands and re-apply:
 > ```bash
-> terraform import module.cloud_run.google_cloud_scheduler_job.daily_birthday_job projects/casa-ahun/locations/us-central1/jobs/ahun-members-service-daily-bday
-> terraform import module.cloud_run.google_cloud_scheduler_job.monthly_notification_job projects/casa-ahun/locations/us-central1/jobs/ahun-members-service-monthly-notif
+> terraform import module.cloud_run.google_cloud_scheduler_job.daily_birthday_job projects/casa-ahun/locations/us-central1/jobs/commons-telegram-daily-bday
+> terraform import module.cloud_run.google_cloud_scheduler_job.monthly_notification_job projects/casa-ahun/locations/us-central1/jobs/commons-telegram-monthly-notif
 > ```
 

@@ -3,7 +3,7 @@ services:
     build:
       context: .
       dockerfile: Dockerfile
-    container_name: ahun-members-service
+    container_name: commons-telegram
     ports:
       - "8080:8080"
     environment:
