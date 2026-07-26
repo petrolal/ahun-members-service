@@ -14,8 +14,8 @@ permissions:
 env:
   GCP_PROJECT_ID: ${{ secrets.GCP_PROJECT_ID || 'casa-ahun' }}
   GCP_REGION: us-central1
-  ARTIFACT_REGISTRY_REPO: commons-telegram-repo
-  SERVICE_NAME: commons-telegram
+  ARTIFACT_REGISTRY_REPO: ahun-members-service-repo
+  SERVICE_NAME: ahun-members-service
   HAVE_GCP_SECRETS: ${{ secrets.GCP_SA_KEY != '' || secrets.GOOGLE_CREDENTIALS != '' || secrets.GCP_CREDENTIALS != '' }}
 
 jobs:

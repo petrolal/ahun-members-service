@@ -4,7 +4,7 @@ spring:
       enabled: false
 
   application:
-    name: commons-telegram
+    name: ahun-members-service
 
   datasource:
     url: ${SPRING_DATASOURCE_URL}

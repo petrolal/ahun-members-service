@@ -8,7 +8,7 @@ plugins {
 group = "com.petrolal.commons.telegram"
 val rawVersion = System.getenv("VERSION") ?: (project.findProperty("version") as? String) ?: "0.0.1-SNAPSHOT"
 version = rawVersion.removePrefix("v")
-description = "commons-telegram"
+description = "ahun-members-service"
 
 publishing {
     publications {
@@ -19,7 +19,7 @@ publishing {
     repositories {
         maven {
             name = "GitHubPackages"
-            url = uri("https://maven.pkg.github.com/petrolal/commons-telegram")
+            url = uri("https://maven.pkg.github.com/petrolal/ahun-members-service")
             credentials {
                 username = System.getenv("GITHUB_ACTOR") ?: ""
                 password = System.getenv("GITHUB_TOKEN") ?: ""
