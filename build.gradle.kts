@@ -5,7 +5,7 @@ plugins {
     alias(libs.plugins.spring.dependency.management)
 }
 
-group = "com.petrolal.ahun"
+group = "com.petrolal.commons.telegram"
 version = "1.0.0"
 description = "commons-telegram"
 
