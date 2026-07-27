@@ -1,30 +1,12 @@
 [versions]
 springBoot = "3.3.5"
 springDependencyManagement = "1.1.7"
-springCommonsWeb = "2.2.0"
+springCommonsWeb = "2.4.0"
 commonsTelegramBot = "1.0.0"
-googleApiClient = "2.8.0"
-googleOauthClientJetty = "1.35.0"
-googleApiServicesSheets = "v4-rev20250106-2.0.0"
-googleHttpClientJackson2 = "1.47.0"
 
 [libraries]
 petrolal-commons-web = { module = "com.petrolal.commons.web:spring-commons-web", version.ref = "springCommonsWeb" }
-petrolal-commons-telegram = { module = "com.petrolal.commons.telegram:commons-telegram-bot", version.ref = "commonsTelegramBot" }
-postgresql = { module = "org.postgresql:postgresql" }
-
-# Third-party libraries with explicit versions
-google-api-client = { group = "com.google.api-client", name = "google-api-client", version.ref = "googleApiClient" }
-google-oauth-client-jetty = { group = "com.google.oauth-client", name = "google-oauth-client-jetty", version.ref = "googleOauthClientJetty" }
-google-api-services-sheets = { group = "com.google.apis", name = "google-api-services-sheets", version.ref = "googleApiServicesSheets" }
-google-http-client-jackson2 = { group = "com.google.http-client", name = "google-http-client-jackson2", version.ref = "googleHttpClientJackson2" }
-
-# Development and testing dependencies (versions managed by Spring Boot dependency management where applicable)
-spring-boot-devtools = { module = "org.springframework.boot:spring-boot-devtools" }
-spring-boot-docker-compose = { module = "org.springframework.boot:spring-boot-docker-compose" }
-spring-boot-starter-test = { module = "org.springframework.boot:spring-boot-starter-test" }
-junit-platform-launcher = { module = "org.junit.platform:junit-platform-launcher" }
-h2 = { module = "com.h2database:h2" }
+petrolal-commons-telegram = { module = "com.petrolal.commons.telegram:commons-telegram", version.ref = "commonsTelegramBot" }
 
 [plugins]
 spring-boot = { id = "org.springframework.boot", version.ref = "springBoot" }

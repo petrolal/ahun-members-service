@@ -10,6 +10,10 @@ val rawVersion = System.getenv("VERSION") ?: (project.findProperty("version") as
 version = rawVersion.removePrefix("v")
 description = "ahun-members-service"
 
+springBoot {
+    mainClass.set("com.petrolal.ahun.members.AhunMembersServiceApplication")
+}
+
 publishing {
     publications {
         create<MavenPublication>("mavenJava") {
@@ -38,10 +42,17 @@ repositories {
     mavenLocal()
     mavenCentral()
     maven {
-        url = uri("https://maven.pkg.github.com/petrolal/*")
+        url = uri("https://maven.pkg.github.com/petrolal/spring-commons-web")
         credentials {
-            username = System.getenv("GITHUB_ACTOR")
-            password = System.getenv("GITHUB_TOKEN")
+            username = System.getenv("GITHUB_ACTOR") ?: "petrolal"
+            password = System.getenv("GITHUB_TOKEN") ?: System.getenv("GH_PAT")
+        }
+    }
+    maven {
+        url = uri("https://maven.pkg.github.com/petrolal/commons-telegram")
+        credentials {
+            username = System.getenv("GITHUB_ACTOR") ?: "petrolal"
+            password = System.getenv("GITHUB_TOKEN") ?: System.getenv("GH_PAT")
         }
     }
 }
@@ -49,20 +60,6 @@ repositories {
 dependencies {
     implementation(libs.petrolal.commons.telegram)
     implementation(libs.petrolal.commons.web)
-
-    runtimeOnly(libs.postgresql)
-
-    implementation(libs.google.api.client)
-    implementation(libs.google.oauth.client.jetty)
-    implementation(libs.google.api.services.sheets)
-
-    implementation(libs.google.http.client.jackson2)
-
-    developmentOnly(libs.spring.boot.devtools)
-    developmentOnly(libs.spring.boot.docker.compose)
-    testImplementation(libs.spring.boot.starter.test)
-    testRuntimeOnly(libs.junit.platform.launcher)
-    testRuntimeOnly(libs.h2)
 }
 
 tasks.withType<Test> {
