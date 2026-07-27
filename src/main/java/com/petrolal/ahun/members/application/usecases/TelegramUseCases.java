@@ -62,7 +62,7 @@ public class TelegramUseCases implements TelegramPort {
 
     public String getMonthName(int valor) {
         if (valor < 1 || valor > 12) return "Invalid Month";
-        return Month.of(valor).getDisplayName(TextStyle.FULL, new Locale("pt", "BR"));
+        return Month.of(valor).getDisplayName(TextStyle.FULL, Locale.of("pt", "BR"));
     }
 
     @Override
