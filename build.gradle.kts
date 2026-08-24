@@ -60,6 +60,8 @@ repositories {
 dependencies {
     implementation(libs.telegrambots.spring.boot.starter)
     implementation(libs.petrolal.commons.web)
+    implementation("javax.xml.bind:jaxb-api:2.3.1")
+    implementation("org.glassfish.jaxb:jaxb-runtime:2.3.9")
 }
 
 tasks.withType<Test> {

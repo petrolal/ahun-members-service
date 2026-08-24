@@ -5,7 +5,7 @@ springCommonsWeb = "2.4.0"
 telegrambotsSpringBootStarter = "6.9.7.1"
 
 [libraries]
-petrolal-commons-web = { module = "com.petrolal.commons.web:spring-commons-web", version.ref = "springCommonsWeb" }
+petrolal-commons-web = { module = "com.petrolal.commons.web:commons-web", version.ref = "springCommonsWeb" }
 telegrambots-spring-boot-starter = { module = "org.telegram:telegrambots-spring-boot-starter", version.ref = "telegrambotsSpringBootStarter" }
 
 [plugins]
