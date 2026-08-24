@@ -2,7 +2,7 @@ package com.petrolal.ahun.members.infrastructure.adapters.rest;
 
 import com.petrolal.ahun.members.application.ports.TelegramPort;
 import com.petrolal.ahun.members.domain.dto.SendMessageDto;
-import com.petrolal.commons.telegram.domain.dto.TelegramResponseDto;
+import com.petrolal.ahun.members.domain.dto.TelegramResponseDto;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;

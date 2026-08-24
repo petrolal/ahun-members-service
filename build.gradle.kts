@@ -58,7 +58,7 @@ repositories {
 }
 
 dependencies {
-    implementation(libs.petrolal.commons.telegram)
+    implementation(libs.telegrambots.spring.boot.starter)
     implementation(libs.petrolal.commons.web)
 }
 

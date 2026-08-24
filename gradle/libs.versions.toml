@@ -2,11 +2,11 @@
 springBoot = "3.3.5"
 springDependencyManagement = "1.1.7"
 springCommonsWeb = "2.4.0"
-commonsTelegramBot = "1.0.0"
+telegrambotsSpringBootStarter = "6.9.7.1"
 
 [libraries]
 petrolal-commons-web = { module = "com.petrolal.commons.web:spring-commons-web", version.ref = "springCommonsWeb" }
-petrolal-commons-telegram = { module = "com.petrolal.commons.telegram:commons-telegram", version.ref = "commonsTelegramBot" }
+telegrambots-spring-boot-starter = { module = "org.telegram:telegrambots-spring-boot-starter", version.ref = "telegrambotsSpringBootStarter" }
 
 [plugins]
 spring-boot = { id = "org.springframework.boot", version.ref = "springBoot" }

@@ -3,7 +3,7 @@ package com.petrolal.ahun.members.infrastructure.adapters.rest;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.petrolal.ahun.members.application.ports.TelegramPort;
 import com.petrolal.ahun.members.domain.dto.SendMessageDto;
-import com.petrolal.commons.telegram.domain.dto.TelegramResponseDto;
+import com.petrolal.ahun.members.domain.dto.TelegramResponseDto;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;

@@ -5,7 +5,7 @@ import com.petrolal.ahun.members.application.ports.MemberPort;
 import com.petrolal.ahun.members.application.ports.MemberRepositoryPort;
 import com.petrolal.ahun.members.application.ports.SheetsReaderPort;
 import com.petrolal.ahun.members.application.ports.TelegramPort;
-import com.petrolal.commons.telegram.application.ports.TelegramSenderPort;
+import com.petrolal.ahun.members.application.ports.TelegramSenderPort;
 import com.petrolal.ahun.members.application.usecases.GoogleSheetUseCase;
 import com.petrolal.ahun.members.application.usecases.MemberUseCase;
 import com.petrolal.ahun.members.application.usecases.TelegramUseCases;
