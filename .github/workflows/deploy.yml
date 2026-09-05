@@ -5,6 +5,11 @@ on:
     branches: [master]
 
   workflow_dispatch:
+    inputs:
+      deploy_version:
+        description: "Existing version tag to (re)deploy, e.g. 2.0.0. Leave blank for the normal release flow."
+        required: false
+        default: ""
 
 permissions:
   contents: write
@@ -92,7 +97,12 @@ jobs:
   image:
     name: Build & Push Image
     needs: [release, test]
-    if: needs.release.outputs.published == 'true' && needs.release.outputs.have_gcp == 'true'
+    if: >-
+      always() &&
+      needs.release.result == 'success' &&
+      needs.test.result == 'success' &&
+      needs.release.outputs.published == 'true' &&
+      needs.release.outputs.have_gcp == 'true'
     runs-on: ubuntu-latest
     steps:
       - name: Checkout Code
@@ -124,7 +134,7 @@ jobs:
             github_token=${{ secrets.GITHUB_TOKEN }}
           tags: |
             ${{ env.GCP_REGION }}-docker.pkg.dev/${{ env.GCP_PROJECT_ID }}/${{ env.ARTIFACT_REGISTRY_REPO }}/${{ env.SERVICE_NAME }}:latest
-            ${{ env.GCP_REGION }}-docker.pkg.dev/${{ env.GCP_PROJECT_ID }}/${{ env.ARTIFACT_REGISTRY_REPO }}/${{ env.SERVICE_NAME }}:${{ needs.release.outputs.version }}
+            ${{ env.GCP_REGION }}-docker.pkg.dev/${{ env.GCP_PROJECT_ID }}/${{ env.ARTIFACT_REGISTRY_REPO }}/${{ env.SERVICE_NAME }}:${{ needs.release.outputs.version || github.event.inputs.deploy_version }}
             ${{ env.GCP_REGION }}-docker.pkg.dev/${{ env.GCP_PROJECT_ID }}/${{ env.ARTIFACT_REGISTRY_REPO }}/${{ env.SERVICE_NAME }}:${{ github.sha }}
           cache-from: type=gha
           cache-to: type=gha,mode=max
@@ -135,7 +145,14 @@ jobs:
   deploy:
     name: Deploy to Cloud Run
     needs: [release, image]
-    if: needs.release.outputs.published == 'true' && needs.release.outputs.have_gcp == 'true'
+    if: >-
+      always() &&
+      needs.release.result == 'success' &&
+      needs.release.outputs.have_gcp == 'true' &&
+      (needs.image.result == 'success' ||
+       (github.event_name == 'workflow_dispatch' &&
+        github.event.inputs.deploy_version != '' &&
+        needs.image.result == 'skipped'))
     runs-on: ubuntu-latest
     steps:
       - name: Authenticate to Google Cloud
@@ -150,7 +167,7 @@ jobs:
       - name: Deploy to Cloud Run
         run: |
           gcloud run deploy ${{ env.SERVICE_NAME }} \
-            --image ${{ env.GCP_REGION }}-docker.pkg.dev/${{ env.GCP_PROJECT_ID }}/${{ env.ARTIFACT_REGISTRY_REPO }}/${{ env.SERVICE_NAME }}:${{ needs.release.outputs.version }} \
+            --image ${{ env.GCP_REGION }}-docker.pkg.dev/${{ env.GCP_PROJECT_ID }}/${{ env.ARTIFACT_REGISTRY_REPO }}/${{ env.SERVICE_NAME }}:${{ needs.release.outputs.version || github.event.inputs.deploy_version }} \
             --region ${{ env.GCP_REGION }} \
             --platform managed \
             --quiet
