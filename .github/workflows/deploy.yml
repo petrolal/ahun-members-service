@@ -12,6 +12,10 @@ on:
         required: false
         type: string
 
+permissions:
+  contents: read
+  packages: read
+
 jobs:
   build-and-test:
     name: Build & Test (java)
@@ -33,3 +37,6 @@ jobs:
 
       - name: Run Build and Tests
         run: ./gradlew check build
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          GITHUB_ACTOR: ${{ github.actor }}
