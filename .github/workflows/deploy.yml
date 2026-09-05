@@ -97,12 +97,6 @@ jobs:
   image:
     name: Build & Push Image
     needs: [release, test]
-    if: >-
-      always() &&
-      needs.release.result == 'success' &&
-      needs.test.result == 'success' &&
-      needs.release.outputs.published == 'true' &&
-      needs.release.outputs.have_gcp == 'true'
     runs-on: ubuntu-latest
     steps:
       - name: Checkout Code
@@ -145,14 +139,6 @@ jobs:
   deploy:
     name: Deploy to Cloud Run
     needs: [release, image]
-    if: >-
-      always() &&
-      needs.release.result == 'success' &&
-      needs.release.outputs.have_gcp == 'true' &&
-      (needs.image.result == 'success' ||
-       (github.event_name == 'workflow_dispatch' &&
-        github.event.inputs.deploy_version != '' &&
-        needs.image.result == 'skipped'))
     runs-on: ubuntu-latest
     steps:
       - name: Authenticate to Google Cloud
