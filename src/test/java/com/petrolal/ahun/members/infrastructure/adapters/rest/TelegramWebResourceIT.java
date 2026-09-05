@@ -1,5 +1,10 @@
 package com.petrolal.ahun.members.infrastructure.adapters.rest;
 
+import static org.mockito.Mockito.when;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
+
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.petrolal.ahun.members.application.ports.TelegramPort;
 import com.petrolal.ahun.members.domain.dto.SendMessageDto;
@@ -12,48 +17,45 @@ import org.springframework.http.MediaType;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.web.servlet.MockMvc;
 
-import static org.mockito.Mockito.when;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
-
 @WebMvcTest(TelegramWebResource.class)
 @ActiveProfiles("test")
 class TelegramWebResourceIT {
 
-    @Autowired
-    private MockMvc mockMvc;
+  @Autowired private MockMvc mockMvc;
 
-    private final ObjectMapper objectMapper = new ObjectMapper();
+  private final ObjectMapper objectMapper = new ObjectMapper();
 
-    @MockBean
-    private TelegramPort telegramPort;
+  @MockBean private TelegramPort telegramPort;
 
-    @Test
-    void shouldSendDailyMessage() throws Exception {
-        SendMessageDto dto = new SendMessageDto(true);
-        TelegramResponseDto responseDto = new TelegramResponseDto(true, null);
+  @Test
+  void shouldSendDailyMessage() throws Exception {
+    SendMessageDto dto = new SendMessageDto(true);
+    TelegramResponseDto responseDto = new TelegramResponseDto(true, null);
 
-        when(telegramPort.sendDailyMessage()).thenReturn(responseDto);
+    when(telegramPort.sendDailyMessage()).thenReturn(responseDto);
 
-        mockMvc.perform(post("/api/messaging/send")
-                        .contentType(MediaType.APPLICATION_JSON)
-                        .content(objectMapper.writeValueAsString(dto)))
-                .andExpect(status().isOk())
-                .andExpect(jsonPath("$.ok").value(true));
-    }
+    mockMvc
+        .perform(
+            post("/api/messaging/send")
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(objectMapper.writeValueAsString(dto)))
+        .andExpect(status().isOk())
+        .andExpect(jsonPath("$.ok").value(true));
+  }
 
-    @Test
-    void shouldSendMonthlyMessage() throws Exception {
-        SendMessageDto dto = new SendMessageDto(false);
-        TelegramResponseDto responseDto = new TelegramResponseDto(true, null);
+  @Test
+  void shouldSendMonthlyMessage() throws Exception {
+    SendMessageDto dto = new SendMessageDto(false);
+    TelegramResponseDto responseDto = new TelegramResponseDto(true, null);
 
-        when(telegramPort.sendMonthlyMessage()).thenReturn(responseDto);
+    when(telegramPort.sendMonthlyMessage()).thenReturn(responseDto);
 
-        mockMvc.perform(post("/api/messaging/send")
-                        .contentType(MediaType.APPLICATION_JSON)
-                        .content(objectMapper.writeValueAsString(dto)))
-                .andExpect(status().isOk())
-                .andExpect(jsonPath("$.ok").value(true));
-    }
+    mockMvc
+        .perform(
+            post("/api/messaging/send")
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(objectMapper.writeValueAsString(dto)))
+        .andExpect(status().isOk())
+        .andExpect(jsonPath("$.ok").value(true));
+  }
 }

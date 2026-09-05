@@ -1,14 +1,20 @@
 services:
   postgres:
-    image: 'postgres:latest'
+    image: "postgres:latest"
     environment:
-      - 'POSTGRES_DB=ahun_members_service'
-      - 'POSTGRES_PASSWORD=ahun'
-      - 'POSTGRES_USER=ahun'
+      - "POSTGRES_DB=ahun_members_service"
+      - "POSTGRES_PASSWORD=ahun"
+      - "POSTGRES_USER=ahun"
     ports:
-      - '5432:5432'
+      - "5432:5432"
     volumes:
       - pg_data:/var/postgresql/data
+  api:
+    build: .
+    ports:
+      - "8080:8080"
+    env_file:
+      - .env
 
 volumes:
   pg_data:

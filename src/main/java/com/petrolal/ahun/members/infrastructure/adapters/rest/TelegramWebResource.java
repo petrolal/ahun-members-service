@@ -14,19 +14,18 @@ import org.springframework.web.bind.annotation.RestController;
 @RequestMapping("/api/messaging")
 public class TelegramWebResource {
 
-    private final TelegramPort telegramPort;
+  private final TelegramPort telegramPort;
 
-    public TelegramWebResource(TelegramPort telegramPort) {
-        this.telegramPort = telegramPort;
+  public TelegramWebResource(TelegramPort telegramPort) {
+    this.telegramPort = telegramPort;
+  }
+
+  @PostMapping("send")
+  TelegramResponseDto sendMessage(@RequestBody SendMessageDto sendMessageDto) {
+    if (sendMessageDto.daily()) {
+      return telegramPort.sendDailyMessage();
     }
 
-    @PostMapping("send")
-    TelegramResponseDto sendMessage(@RequestBody SendMessageDto sendMessageDto) {
-        if (sendMessageDto.daily()) {
-            return telegramPort.sendDailyMessage();
-        }
-
-        return telegramPort.sendMonthlyMessage();
-    }
-
+    return telegramPort.sendMonthlyMessage();
+  }
 }

@@ -3,36 +3,34 @@ package com.petrolal.ahun.members.infrastructure.adapters.rest;
 import com.petrolal.ahun.members.application.ports.MemberPort;
 import com.petrolal.ahun.members.domain.model.Member;
 import io.swagger.v3.oas.annotations.tags.Tag;
+import java.util.List;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
-
-import java.util.List;
 
 @Tag(name = "Members")
 @RestController
 @RequestMapping("/api/members")
 public class MemberWebResource {
 
-    private final MemberPort memberPort;
+  private final MemberPort memberPort;
 
-    public MemberWebResource(MemberPort memberPort) {
-        this.memberPort = memberPort;
+  public MemberWebResource(MemberPort memberPort) {
+    this.memberPort = memberPort;
+  }
+
+  @GetMapping
+  public List<Member> getMembers() {
+    return memberPort.getMembers();
+  }
+
+  @GetMapping("current")
+  public List<Member> getCurrentMonthBirthdays(@RequestParam Boolean today) {
+    if (today) {
+      return memberPort.getBirthdaysByMonthAndDate();
     }
 
-    @GetMapping
-    public List<Member> getMembers() {
-        return memberPort.getMembers();
-    }
-
-    @GetMapping("current")
-    public List<Member> getCurrentMonthBirthdays(@RequestParam Boolean today) {
-        if (today) {
-            return memberPort.getBirthdaysByMonthAndDate();
-        }
-
-        return memberPort.getMembersByCurrentMonth();
-    }
-
+    return memberPort.getMembersByCurrentMonth();
+  }
 }

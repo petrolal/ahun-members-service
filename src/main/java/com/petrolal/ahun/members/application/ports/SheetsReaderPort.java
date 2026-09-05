@@ -4,5 +4,5 @@ import com.petrolal.ahun.members.domain.dto.MemberFromSheetDto;
 import java.util.List;
 
 public interface SheetsReaderPort {
-    List<MemberFromSheetDto> readMemberSheet();
+  List<MemberFromSheetDto> readMemberSheet();
 }

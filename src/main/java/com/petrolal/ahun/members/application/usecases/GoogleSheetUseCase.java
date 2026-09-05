@@ -3,42 +3,36 @@ package com.petrolal.ahun.members.application.usecases;
 import com.petrolal.ahun.members.application.ports.GoogleSheetPort;
 import com.petrolal.ahun.members.application.ports.MemberRepositoryPort;
 import com.petrolal.ahun.members.application.ports.SheetsReaderPort;
-import com.petrolal.ahun.members.domain.model.Member;
 import com.petrolal.ahun.members.domain.dto.MemberFromSheetDto;
-
+import com.petrolal.ahun.members.domain.model.Member;
 import java.util.List;
 
 public class GoogleSheetUseCase implements GoogleSheetPort {
 
-    private final SheetsReaderPort sheetsReaderPort;
-    private final MemberRepositoryPort memberRepositoryPort;
+  private final SheetsReaderPort sheetsReaderPort;
+  private final MemberRepositoryPort memberRepositoryPort;
 
-    public GoogleSheetUseCase(SheetsReaderPort sheetsReaderPort,
-                              MemberRepositoryPort memberRepositoryPort) {
-        this.sheetsReaderPort = sheetsReaderPort;
-        this.memberRepositoryPort = memberRepositoryPort;
-    }
+  public GoogleSheetUseCase(
+      SheetsReaderPort sheetsReaderPort, MemberRepositoryPort memberRepositoryPort) {
+    this.sheetsReaderPort = sheetsReaderPort;
+    this.memberRepositoryPort = memberRepositoryPort;
+  }
 
-    @Override
-    public List<MemberFromSheetDto> readMemberSheet() {
-        return sheetsReaderPort.readMemberSheet();
-    }
+  @Override
+  public List<MemberFromSheetDto> readMemberSheet() {
+    return sheetsReaderPort.readMemberSheet();
+  }
 
-    @Override
-    public List<Member> syncSheet() {
-        List<MemberFromSheetDto> response = this.readMemberSheet();
+  @Override
+  public List<Member> syncSheet() {
+    List<MemberFromSheetDto> response = this.readMemberSheet();
 
-        List<Member> members = response.stream()
-                .map(i -> new Member(
-                        null,
-                        i.member_name(),
-                        i.email(),
-                        i.birthday(),
-                        i.createdAt()
-                ))
-                .toList();
+    List<Member> members =
+        response.stream()
+            .map(i -> new Member(null, i.member_name(), i.email(), i.birthday(), i.createdAt()))
+            .toList();
 
-        memberRepositoryPort.deleteAll();
-        return memberRepositoryPort.saveAll(members);
-    }
+    memberRepositoryPort.deleteAll();
+    return memberRepositoryPort.saveAll(members);
+  }
 }

@@ -15,19 +15,19 @@ import org.springframework.context.annotation.Configuration;
 @Configuration
 public class BeansConfig {
 
-    @Bean
-    MemberPort memberPort(MemberRepositoryPort memberRepositoryPort) {
-        return new MemberUseCase(memberRepositoryPort);
-    }
+  @Bean
+  MemberPort memberPort(MemberRepositoryPort memberRepositoryPort) {
+    return new MemberUseCase(memberRepositoryPort);
+  }
 
-    @Bean
-    GoogleSheetPort googleSheetPort(SheetsReaderPort sheetsReaderPort,
-                                    MemberRepositoryPort memberRepositoryPort) {
-        return new GoogleSheetUseCase(sheetsReaderPort, memberRepositoryPort);
-    }
+  @Bean
+  GoogleSheetPort googleSheetPort(
+      SheetsReaderPort sheetsReaderPort, MemberRepositoryPort memberRepositoryPort) {
+    return new GoogleSheetUseCase(sheetsReaderPort, memberRepositoryPort);
+  }
 
-    @Bean
-    TelegramPort telegramPort(TelegramSenderPort telegramSenderPort, MemberPort memberPort) {
-        return new TelegramUseCases(telegramSenderPort, memberPort);
-    }
+  @Bean
+  TelegramPort telegramPort(TelegramSenderPort telegramSenderPort, MemberPort memberPort) {
+    return new TelegramUseCases(telegramSenderPort, memberPort);
+  }
 }

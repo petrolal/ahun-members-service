@@ -19,11 +19,11 @@ spring:
       ddl-auto: none
 
 telegram:
-  bot-token: ${TELEGRAM_BOT_TOKEN:}
-  chat-id: ${TELEGRAM_CHAT_ID:}
+  bot-token: ${TELEGRAM_BOT_TOKEN}
+  chat-id: ${TELEGRAM_CHAT_ID}
 
 google:
-  credentials: ${GOOGLE_CREDENTIALS:}
+  credentials: ${GOOGLE_CREDENTIALS}
 
 petrolal:
   commons:
@@ -32,4 +32,3 @@ petrolal:
         title: Ahun Members Service
         description: Service to manage members
         version: "1.0"
-

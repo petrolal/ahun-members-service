@@ -3,33 +3,32 @@ package com.petrolal.ahun.members.application.usecases;
 import com.petrolal.ahun.members.application.ports.MemberPort;
 import com.petrolal.ahun.members.application.ports.MemberRepositoryPort;
 import com.petrolal.ahun.members.domain.model.Member;
-
 import java.time.LocalDate;
 import java.util.List;
 
 public class MemberUseCase implements MemberPort {
 
-    private final MemberRepositoryPort memberRepositoryPort;
+  private final MemberRepositoryPort memberRepositoryPort;
 
-    public MemberUseCase(MemberRepositoryPort memberRepositoryPort) {
-        this.memberRepositoryPort = memberRepositoryPort;
-    }
+  public MemberUseCase(MemberRepositoryPort memberRepositoryPort) {
+    this.memberRepositoryPort = memberRepositoryPort;
+  }
 
-    @Override
-    public List<Member> getMembers() {
-        return memberRepositoryPort.findall();
-    }
+  @Override
+  public List<Member> getMembers() {
+    return memberRepositoryPort.findall();
+  }
 
-    @Override
-    public List<Member> getMembersByCurrentMonth() {
-        int monthValue = LocalDate.now().getMonthValue();
-        return memberRepositoryPort.findByMonth(monthValue);
-    }
+  @Override
+  public List<Member> getMembersByCurrentMonth() {
+    int monthValue = LocalDate.now().getMonthValue();
+    return memberRepositoryPort.findByMonth(monthValue);
+  }
 
-    @Override
-    public List<Member> getBirthdaysByMonthAndDate() {
-        int dayValue = LocalDate.now().getDayOfMonth();
-        int  monthValue = LocalDate.now().getMonthValue();
-        return memberRepositoryPort.findByMonthAndDay(monthValue, dayValue);
-    }
+  @Override
+  public List<Member> getBirthdaysByMonthAndDate() {
+    int dayValue = LocalDate.now().getDayOfMonth();
+    int monthValue = LocalDate.now().getMonthValue();
+    return memberRepositoryPort.findByMonthAndDay(monthValue, dayValue);
+  }
 }

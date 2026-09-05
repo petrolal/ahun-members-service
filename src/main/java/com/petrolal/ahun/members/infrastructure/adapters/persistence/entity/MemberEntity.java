@@ -2,7 +2,6 @@ package com.petrolal.ahun.members.infrastructure.adapters.persistence.entity;
 
 import com.petrolal.ahun.members.domain.model.Member;
 import jakarta.persistence.*;
-
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.UUID;
@@ -11,73 +10,72 @@ import java.util.UUID;
 @Table(name = "members")
 public class MemberEntity {
 
-    @Id
-    @GeneratedValue(strategy = GenerationType.UUID)
-    private UUID uuid;
+  @Id
+  @GeneratedValue(strategy = GenerationType.UUID)
+  private UUID uuid;
 
-    @Column(name = "member_name", nullable = false, length = 50)
-    private String memberName;
-    private String email;
-    private LocalDate birthday;
-    private LocalDateTime createdAt;
+  @Column(name = "member_name", nullable = false, length = 50)
+  private String memberName;
 
-    @Column(name = "month_birthday", insertable = false, updatable = false)
-    private int monthBirthday;
+  private String email;
+  private LocalDate birthday;
+  private LocalDateTime createdAt;
 
-    public MemberEntity() {
-    }
+  @Column(name = "month_birthday", insertable = false, updatable = false)
+  private int monthBirthday;
 
-    public MemberEntity(String email, String memberName, LocalDate birthday,  LocalDateTime createdAt) {
-        this.email = email;
-        this.memberName = memberName;
-        this.birthday = birthday;
-        this.createdAt = createdAt;
-    }
+  public MemberEntity() {}
 
-    public static Member toDomain(MemberEntity memberEntity) {
-        return new Member(
-                memberEntity.getUuid(),
-                memberEntity.getMemberName(),
-                memberEntity.getEmail(),
-                memberEntity.getBirthday(),
-                memberEntity.getCreatedAt()
-        );
-    }
+  public MemberEntity(
+      String email, String memberName, LocalDate birthday, LocalDateTime createdAt) {
+    this.email = email;
+    this.memberName = memberName;
+    this.birthday = birthday;
+    this.createdAt = createdAt;
+  }
 
-    public UUID getUuid() {
-        return uuid;
-    }
+  public static Member toDomain(MemberEntity memberEntity) {
+    return new Member(
+        memberEntity.getUuid(),
+        memberEntity.getMemberName(),
+        memberEntity.getEmail(),
+        memberEntity.getBirthday(),
+        memberEntity.getCreatedAt());
+  }
 
-    public void setUuid(UUID uuid) {
-        this.uuid = uuid;
-    }
+  public UUID getUuid() {
+    return uuid;
+  }
 
-    public String getEmail() {
-        return email;
-    }
+  public void setUuid(UUID uuid) {
+    this.uuid = uuid;
+  }
 
-    public void setEmail(String email) {
-        this.email = email;
-    }
+  public String getEmail() {
+    return email;
+  }
 
-    public String getMemberName() {
-        return memberName;
-    }
+  public void setEmail(String email) {
+    this.email = email;
+  }
 
-    public void setMemberName(String memberName) {
-        this.memberName = memberName;
-    }
+  public String getMemberName() {
+    return memberName;
+  }
 
-    public LocalDate getBirthday() {
-        return birthday;
-    }
+  public void setMemberName(String memberName) {
+    this.memberName = memberName;
+  }
 
-    public void setBirthday(LocalDate birthday) {
-        this.birthday = birthday;
-    }
+  public LocalDate getBirthday() {
+    return birthday;
+  }
 
-    public LocalDateTime getCreatedAt() {
-        return createdAt;
-    }
+  public void setBirthday(LocalDate birthday) {
+    this.birthday = birthday;
+  }
 
+  public LocalDateTime getCreatedAt() {
+    return createdAt;
+  }
 }
