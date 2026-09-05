@@ -22,31 +22,47 @@ env:
   GCP_REGION: us-central1
   ARTIFACT_REGISTRY_REPO: ahun-members-service-repo
   SERVICE_NAME: ahun-members-service
-  HAVE_GCP_SECRETS: ${{ secrets.GCP_SA_KEY != '' || secrets.GOOGLE_CREDENTIALS != '' || secrets.GCP_CREDENTIALS != '' }}
 
 jobs:
-  test-build-deploy:
-    name: Test, Build and Deploy
+  # -------------------------------------------------------------------------
+  # Stage 1 - resolve the build version and detect whether GCP is configured
+  # -------------------------------------------------------------------------
+  setup:
+    name: Setup
     runs-on: ubuntu-latest
-
+    outputs:
+      version: ${{ steps.version.outputs.version }}
+      have_gcp: ${{ steps.gcp.outputs.have_gcp }}
     steps:
-      # 1. Checkout codebase
-      - name: Checkout Code
-        uses: actions/checkout@v4
-
-      # 2. Determine Build Version
       - name: Determine Build Version
         id: version
         run: |
-          if [[ "${{ github.ref_type }}" == "tag" ]]; then
+          if [[ -n "${{ inputs.version }}" ]]; then
+            VER="${{ inputs.version }}"
+          elif [[ "${{ github.ref_type }}" == "tag" ]]; then
             VER="${GITHUB_REF_NAME#v}"
           else
             VER="1.0.${{ github.run_number }}"
           fi
-          echo "VERSION=${VER}" >> $GITHUB_ENV
+          echo "version=${VER}" >> "$GITHUB_OUTPUT"
           echo "Build version set to: ${VER}"
 
-      # 3. Set up Java JDK 25
+      - name: Detect GCP secrets
+        id: gcp
+        run: |
+          echo "have_gcp=${{ secrets.GCP_SA_KEY != '' || secrets.GOOGLE_CREDENTIALS != '' || secrets.GCP_CREDENTIALS != '' }}" >> "$GITHUB_OUTPUT"
+
+  # -------------------------------------------------------------------------
+  # Stage 2 - run the test suite
+  # -------------------------------------------------------------------------
+  test:
+    name: Test
+    needs: setup
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout Code
+        uses: actions/checkout@v4
+
       - name: Set up JDK 25
         uses: actions/setup-java@v4
         with:
@@ -54,71 +70,109 @@ jobs:
           distribution: "temurin"
           cache: "gradle"
 
-      # 4. Grant execute permission for gradlew
       - name: Grant execute permission for gradlew
         run: chmod +x gradlew
 
-      # 5. Run tests
       - name: Run Test Suite
         run: ./gradlew test --no-daemon
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           GITHUB_ACTOR: ${{ github.actor }}
-          VERSION: ${{ env.VERSION }}
+          VERSION: ${{ needs.setup.outputs.version }}
 
-      # 6. Publish Package to GitHub Packages
-      - name: Publish Package to GitHub Packages
+  # -------------------------------------------------------------------------
+  # Stage 3 - publish the library to GitHub Packages
+  # -------------------------------------------------------------------------
+  publish:
+    name: Publish to GitHub Packages
+    needs: [setup, test]
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout Code
+        uses: actions/checkout@v4
+
+      - name: Set up JDK 25
+        uses: actions/setup-java@v4
+        with:
+          java-version: "25"
+          distribution: "temurin"
+          cache: "gradle"
+
+      - name: Grant execute permission for gradlew
+        run: chmod +x gradlew
+
+      - name: Publish Package
         run: ./gradlew publish --no-daemon
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           GITHUB_ACTOR: ${{ github.actor }}
-          VERSION: ${{ env.VERSION }}
+          VERSION: ${{ needs.setup.outputs.version }}
 
-      # 7. Authenticate to Google Cloud
+  # -------------------------------------------------------------------------
+  # Stage 4 - build the container image and push it to Artifact Registry
+  # -------------------------------------------------------------------------
+  image:
+    name: Build & Push Image
+    needs: [setup, test]
+    if: needs.setup.outputs.have_gcp == 'true'
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout Code
+        uses: actions/checkout@v4
+
       - name: Authenticate to Google Cloud
-        if: ${{ env.HAVE_GCP_SECRETS == 'true' }}
         id: auth
         uses: google-github-actions/auth@v2
         with:
           credentials_json: ${{ secrets.GCP_SA_KEY || secrets.GOOGLE_CREDENTIALS || secrets.GCP_CREDENTIALS }}
 
-      # 8. Set up Cloud SDK
       - name: Set up Cloud SDK
-        if: ${{ env.HAVE_GCP_SECRETS == 'true' }}
         uses: google-github-actions/setup-gcloud@v2
 
-      # 9. Configure Docker to use Artifact Registry credentials
       - name: Configure Docker
-        if: ${{ env.HAVE_GCP_SECRETS == 'true' }}
-        run: |
-          gcloud auth configure-docker ${{ env.GCP_REGION }}-docker.pkg.dev --quiet
+        run: gcloud auth configure-docker ${{ env.GCP_REGION }}-docker.pkg.dev --quiet
 
-      # 10. Set up Docker Buildx (for building images efficiently)
       - name: Set up Docker Buildx
-        if: ${{ env.HAVE_GCP_SECRETS == 'true' }}
         uses: docker/setup-buildx-action@v3
 
-      # 11. Build and Push Container Image
       - name: Build and Push Container Image
-        if: ${{ env.HAVE_GCP_SECRETS == 'true' }}
         uses: docker/build-push-action@v5
         with:
           context: .
           file: ./Dockerfile
           push: true
+          secrets: |
+            github_actor=${{ github.actor }}
+            github_token=${{ secrets.GITHUB_TOKEN }}
           tags: |
             ${{ env.GCP_REGION }}-docker.pkg.dev/${{ env.GCP_PROJECT_ID }}/${{ env.ARTIFACT_REGISTRY_REPO }}/${{ env.SERVICE_NAME }}:latest
-            ${{ env.GCP_REGION }}-docker.pkg.dev/${{ env.GCP_PROJECT_ID }}/${{ env.ARTIFACT_REGISTRY_REPO }}/${{ env.SERVICE_NAME }}:${{ env.VERSION }}
+            ${{ env.GCP_REGION }}-docker.pkg.dev/${{ env.GCP_PROJECT_ID }}/${{ env.ARTIFACT_REGISTRY_REPO }}/${{ env.SERVICE_NAME }}:${{ needs.setup.outputs.version }}
             ${{ env.GCP_REGION }}-docker.pkg.dev/${{ env.GCP_PROJECT_ID }}/${{ env.ARTIFACT_REGISTRY_REPO }}/${{ env.SERVICE_NAME }}:${{ github.sha }}
           cache-from: type=gha
           cache-to: type=gha,mode=max
 
-      # 12. Deploy container to Google Cloud Run
+  # -------------------------------------------------------------------------
+  # Stage 5 - deploy the image to Cloud Run
+  # -------------------------------------------------------------------------
+  deploy:
+    name: Deploy to Cloud Run
+    needs: [setup, image]
+    if: needs.setup.outputs.have_gcp == 'true'
+    runs-on: ubuntu-latest
+    steps:
+      - name: Authenticate to Google Cloud
+        id: auth
+        uses: google-github-actions/auth@v2
+        with:
+          credentials_json: ${{ secrets.GCP_SA_KEY || secrets.GOOGLE_CREDENTIALS || secrets.GCP_CREDENTIALS }}
+
+      - name: Set up Cloud SDK
+        uses: google-github-actions/setup-gcloud@v2
+
       - name: Deploy to Cloud Run
-        if: ${{ env.HAVE_GCP_SECRETS == 'true' }}
         run: |
           gcloud run deploy ${{ env.SERVICE_NAME }} \
-            --image ${{ env.GCP_REGION }}-docker.pkg.dev/${{ env.GCP_PROJECT_ID }}/${{ env.ARTIFACT_REGISTRY_REPO }}/${{ env.SERVICE_NAME }}:${{ env.VERSION }} \
+            --image ${{ env.GCP_REGION }}-docker.pkg.dev/${{ env.GCP_PROJECT_ID }}/${{ env.ARTIFACT_REGISTRY_REPO }}/${{ env.SERVICE_NAME }}:${{ needs.setup.outputs.version }} \
             --region ${{ env.GCP_REGION }} \
             --platform managed \
             --quiet
