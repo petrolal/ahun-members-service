@@ -1,3 +1,13 @@
+## [3.0.0](https://github.com/petrolal/ahun-members-service/compare/v2.0.0...v3.0.0) (2026-09-05)
+
+### ⚠ BREAKING CHANGES
+
+* fix the ci
+
+### Bug Fixes
+
+* fix the ci ([98b1264](https://github.com/petrolal/ahun-members-service/commit/98b1264e4357a76455337be66ac6aaf9a8f96194))
+
 ## [2.0.0](https://github.com/petrolal/ahun-members-service/compare/v1.0.7...v2.0.0) (2026-09-05)
 
 ### ⚠ BREAKING CHANGES
