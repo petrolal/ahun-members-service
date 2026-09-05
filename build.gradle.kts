@@ -44,15 +44,15 @@ repositories {
     maven {
         url = uri("https://maven.pkg.github.com/petrolal/spring-commons-web")
         credentials {
-            username = System.getenv("GITHUB_ACTOR") ?: "petrolal"
-            password = System.getenv("GITHUB_TOKEN") ?: System.getenv("GH_PAT")
+            username = project.findProperty("gpr.user") as String? ?: System.getenv("GITHUB_ACTOR")
+            password = project.findProperty("gpr.key") as String? ?: System.getenv("GITHUB_TOKEN")
         }
     }
     maven {
         url = uri("https://maven.pkg.github.com/petrolal/commons-telegram")
         credentials {
-            username = System.getenv("GITHUB_ACTOR") ?: "petrolal"
-            password = System.getenv("GITHUB_TOKEN") ?: System.getenv("GH_PAT")
+            username = project.findProperty("gpr.user") as String? ?: System.getenv("GITHUB_ACTOR")
+            password = project.findProperty("gpr.key") as String? ?: System.getenv("GITHUB_TOKEN")
         }
     }
 }
