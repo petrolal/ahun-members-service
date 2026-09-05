@@ -2,20 +2,15 @@ name: Build and Deploy to Cloud Run
 
 on:
   push:
-    tags:
-      - "v*"
-      - "[0-9]+.[0-9]+.[0-9]+*"
+    branches: [master]
 
   workflow_dispatch:
-    inputs:
-      version:
-        description: "Version to publish (e.g. 1.0.0 - leave empty to use tag/default)"
-        required: false
-        type: string
 
 permissions:
-  contents: read
+  contents: write
   packages: write
+  issues: write
+  pull-requests: write
 
 env:
   GCP_PROJECT_ID: ${{ secrets.GCP_PROJECT_ID || 'casa-ahun' }}
@@ -25,27 +20,36 @@ env:
 
 jobs:
   # -------------------------------------------------------------------------
-  # Stage 1 - resolve the build version and detect whether GCP is configured
+  # Stage 1 - analyse Conventional Commits, cut a release, resolve version
   # -------------------------------------------------------------------------
-  setup:
-    name: Setup
+  release:
+    name: Release
     runs-on: ubuntu-latest
     outputs:
-      version: ${{ steps.version.outputs.version }}
+      version: ${{ steps.semantic.outputs.new_release_version }}
+      published: ${{ steps.semantic.outputs.new_release_published }}
       have_gcp: ${{ steps.gcp.outputs.have_gcp }}
     steps:
-      - name: Determine Build Version
-        id: version
+      - name: Checkout Code
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+          persist-credentials: true
+
+      - name: Semantic Release
+        id: semantic
+        uses: cycjimmy/semantic-release-action@v4
+        with:
+          extra_plugins: |
+            @semantic-release/changelog
+            @semantic-release/git
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Report resolved release
         run: |
-          if [[ -n "${{ inputs.version }}" ]]; then
-            VER="${{ inputs.version }}"
-          elif [[ "${{ github.ref_type }}" == "tag" ]]; then
-            VER="${GITHUB_REF_NAME#v}"
-          else
-            VER="1.0.${{ github.run_number }}"
-          fi
-          echo "version=${VER}" >> "$GITHUB_OUTPUT"
-          echo "Build version set to: ${VER}"
+          echo "published = ${{ steps.semantic.outputs.new_release_published }}"
+          echo "version   = ${{ steps.semantic.outputs.new_release_version }}"
 
       - name: Detect GCP secrets
         id: gcp
@@ -57,7 +61,8 @@ jobs:
   # -------------------------------------------------------------------------
   test:
     name: Test
-    needs: setup
+    needs: release
+    if: needs.release.outputs.published == 'true'
     runs-on: ubuntu-latest
     steps:
       - name: Checkout Code
@@ -78,43 +83,15 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           GITHUB_ACTOR: ${{ github.actor }}
-          VERSION: ${{ needs.setup.outputs.version }}
+          VERSION: ${{ needs.release.outputs.version }}
 
   # -------------------------------------------------------------------------
-  # Stage 3 - publish the library to GitHub Packages
-  # -------------------------------------------------------------------------
-  publish:
-    name: Publish to GitHub Packages
-    needs: [setup, test]
-    runs-on: ubuntu-latest
-    steps:
-      - name: Checkout Code
-        uses: actions/checkout@v4
-
-      - name: Set up JDK 25
-        uses: actions/setup-java@v4
-        with:
-          java-version: "25"
-          distribution: "temurin"
-          cache: "gradle"
-
-      - name: Grant execute permission for gradlew
-        run: chmod +x gradlew
-
-      - name: Publish Package
-        run: ./gradlew publish --no-daemon
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-          GITHUB_ACTOR: ${{ github.actor }}
-          VERSION: ${{ needs.setup.outputs.version }}
-
-  # -------------------------------------------------------------------------
-  # Stage 4 - build the container image and push it to Artifact Registry
+  # Stage 3 - build the container image and push it to Artifact Registry
   # -------------------------------------------------------------------------
   image:
     name: Build & Push Image
-    needs: [setup, test]
-    if: needs.setup.outputs.have_gcp == 'true'
+    needs: [release, test]
+    if: needs.release.outputs.published == 'true' && needs.release.outputs.have_gcp == 'true'
     runs-on: ubuntu-latest
     steps:
       - name: Checkout Code
@@ -146,18 +123,18 @@ jobs:
             github_token=${{ secrets.GITHUB_TOKEN }}
           tags: |
             ${{ env.GCP_REGION }}-docker.pkg.dev/${{ env.GCP_PROJECT_ID }}/${{ env.ARTIFACT_REGISTRY_REPO }}/${{ env.SERVICE_NAME }}:latest
-            ${{ env.GCP_REGION }}-docker.pkg.dev/${{ env.GCP_PROJECT_ID }}/${{ env.ARTIFACT_REGISTRY_REPO }}/${{ env.SERVICE_NAME }}:${{ needs.setup.outputs.version }}
+            ${{ env.GCP_REGION }}-docker.pkg.dev/${{ env.GCP_PROJECT_ID }}/${{ env.ARTIFACT_REGISTRY_REPO }}/${{ env.SERVICE_NAME }}:${{ needs.release.outputs.version }}
             ${{ env.GCP_REGION }}-docker.pkg.dev/${{ env.GCP_PROJECT_ID }}/${{ env.ARTIFACT_REGISTRY_REPO }}/${{ env.SERVICE_NAME }}:${{ github.sha }}
           cache-from: type=gha
           cache-to: type=gha,mode=max
 
   # -------------------------------------------------------------------------
-  # Stage 5 - deploy the image to Cloud Run
+  # Stage 4 - deploy the image to Cloud Run
   # -------------------------------------------------------------------------
   deploy:
     name: Deploy to Cloud Run
-    needs: [setup, image]
-    if: needs.setup.outputs.have_gcp == 'true'
+    needs: [release, image]
+    if: needs.release.outputs.published == 'true' && needs.release.outputs.have_gcp == 'true'
     runs-on: ubuntu-latest
     steps:
       - name: Authenticate to Google Cloud
@@ -172,7 +149,7 @@ jobs:
       - name: Deploy to Cloud Run
         run: |
           gcloud run deploy ${{ env.SERVICE_NAME }} \
-            --image ${{ env.GCP_REGION }}-docker.pkg.dev/${{ env.GCP_PROJECT_ID }}/${{ env.ARTIFACT_REGISTRY_REPO }}/${{ env.SERVICE_NAME }}:${{ needs.setup.outputs.version }} \
+            --image ${{ env.GCP_REGION }}-docker.pkg.dev/${{ env.GCP_PROJECT_ID }}/${{ env.ARTIFACT_REGISTRY_REPO }}/${{ env.SERVICE_NAME }}:${{ needs.release.outputs.version }} \
             --region ${{ env.GCP_REGION }} \
             --platform managed \
             --quiet
