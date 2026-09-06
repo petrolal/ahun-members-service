@@ -20,7 +20,7 @@ permissions:
 env:
   GCP_PROJECT_ID: ${{ secrets.GCP_PROJECT_ID || 'casa-ahun' }}
   GCP_REGION: us-central1
-  ARTIFACT_REGISTRY_REPO: ahun-members-service-repo
+  ARTIFACT_REGISTRY_REPO: ahun-members-service
   SERVICE_NAME: ahun-members-service
 
 jobs:
