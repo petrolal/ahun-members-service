@@ -1,5 +1,8 @@
 # Stage 1: Build
-FROM eclipse-temurin:25-jdk-alpine AS builder
+# Must match the Gradle toolchain (languageVersion 21 in build.gradle.kts).
+# If the JDK here is newer, Gradle tries to auto-provision a JDK 21 toolchain
+# via the foojay resolver, which crashes on Gradle 9 (JvmVendorSpec.IBM_SEMERU).
+FROM eclipse-temurin:21-jdk-alpine AS builder
 WORKDIR /app
 
 # Copy only necessary files
