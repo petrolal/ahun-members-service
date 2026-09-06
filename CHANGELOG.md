@@ -1,3 +1,16 @@
+## [4.0.0](https://github.com/petrolal/ahun-members-service/compare/v3.0.0...v4.0.0) (2026-09-06)
+
+### ⚠ BREAKING CHANGES
+
+* fix the ci
+
+### Bug Fixes
+
+* ci release ([a8a2cbf](https://github.com/petrolal/ahun-members-service/commit/a8a2cbffaf40de82d48e7e63136a6eff943fd01f))
+* fix the ci ([46eebca](https://github.com/petrolal/ahun-members-service/commit/46eebca023bd9925a96ed4e3d62d480bf7e1ed55))
+* remove qioodana ([0cb54b4](https://github.com/petrolal/ahun-members-service/commit/0cb54b43e82979624a35f4dc370b403e8552ae6e))
+* secret ([1629345](https://github.com/petrolal/ahun-members-service/commit/1629345e5b6a45702c05cebf454d6b1914b7fb62))
+
 ## [3.0.0](https://github.com/petrolal/ahun-members-service/compare/v2.0.0...v3.0.0) (2026-09-06)
 
 ### ⚠ BREAKING CHANGES
