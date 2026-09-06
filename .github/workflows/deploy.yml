@@ -6,6 +6,11 @@ on:
 
   workflow_dispatch:
 
+# Never let two release runs overlap - overlapping runs are what orphan tags.
+concurrency:
+  group: release-${{ github.ref }}
+  cancel-in-progress: false
+
 permissions:
   contents: write
   packages: write
@@ -42,8 +47,6 @@ jobs:
         uses: cycjimmy/semantic-release-action@v4
         with:
           extra_plugins: |
-            @semantic-release/changelog
-            @semantic-release/git
             conventional-changelog-conventionalcommits@8
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}

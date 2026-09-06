@@ -13,20 +13,12 @@
         "preset": "conventionalcommits"
       }
     ],
-    "@semantic-release/changelog",
     [
       "@semantic-release/github",
       {
         "successComment": false,
         "failComment": false,
         "releasedLabels": false
-      }
-    ],
-    [
-      "@semantic-release/git",
-      {
-        "assets": ["CHANGELOG.md"],
-        "message": "chore(release): ${nextRelease.version} [skip ci]"
       }
     ]
   ]
