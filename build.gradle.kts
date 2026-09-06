@@ -59,7 +59,13 @@ repositories {
 
 dependencies {
     implementation(libs.telegrambots.spring.boot.starter)
-    implementation(libs.petrolal.commons.web)
+    implementation(libs.petrolal.commons.web) {
+        // commons-web leaks development-only Spring Boot modules onto the
+        // runtime classpath. spring-boot-docker-compose aborts startup when no
+        // compose file is present (as on Cloud Run), so keep them out of the jar.
+        exclude(group = "org.springframework.boot", module = "spring-boot-docker-compose")
+        exclude(group = "org.springframework.boot", module = "spring-boot-devtools")
+    }
     implementation("javax.xml.bind:jaxb-api:2.3.1")
     implementation("org.glassfish.jaxb:jaxb-runtime:2.3.9")
 }
