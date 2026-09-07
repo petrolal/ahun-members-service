@@ -135,15 +135,18 @@ jobs:
           cache-to: type=gha,mode=max
 
   # -------------------------------------------------------------------------
-  # Stage 4 - deploy the image to Cloud Run
+  # Stage 4 - provision the service infrastructure, then deploy the image
   # -------------------------------------------------------------------------
   deploy:
-    name: Deploy to Cloud Run
+    name: Provision infra & deploy to Cloud Run
     needs: [release, image]
     if: needs.release.outputs.published == 'true' && needs.release.outputs.have_gcp == 'true'
     runs-on: ubuntu-latest
     environment: GCP_SA_KEY
     steps:
+      - name: Checkout Code
+        uses: actions/checkout@v4
+
       - name: Authenticate to Google Cloud
         id: auth
         uses: google-github-actions/auth@v2
@@ -152,6 +155,30 @@ jobs:
 
       - name: Set up Cloud SDK
         uses: google-github-actions/setup-gcloud@v2
+
+      - name: Set up Terraform
+        uses: hashicorp/setup-terraform@v3
+        with:
+          terraform_version: "1.15.9"
+
+      # ---- Terraform (gcp/ in this repo): create/update the Cloud Run service,
+      #      its Artifact Registry repo, service accounts, IAM and scheduler jobs.
+      #      Image is ignored by Terraform and rolled out by the deploy step below.
+      #      Backend bucket + prefix and service_name are hardcoded in gcp/main.tf.
+      - name: Provision service infrastructure
+        working-directory: gcp
+        env:
+          # google provider picks up GOOGLE_APPLICATION_CREDENTIALS from the auth step
+          TF_VAR_project_id: ${{ env.GCP_PROJECT_ID }}
+          TF_VAR_region: ${{ env.GCP_REGION }}
+          TF_VAR_spring_datasource_url: ${{ secrets.SPRING_DATASOURCE_URL }}
+          TF_VAR_spring_datasource_password: ${{ secrets.SPRING_DATASOURCE_PASSWORD }}
+          TF_VAR_telegram_chat_id: ${{ secrets.TELEGRAM_CHAT_ID }}
+          TF_VAR_bot_token_secret_id: ${{ secrets.BOT_TOKEN_SECRET_ID }}
+          TF_VAR_google_credentials: ${{ secrets.SHEETS_GOOGLE_CREDENTIALS || 'DEFAULT_GCP' }}
+        run: |
+          terraform init -input=false
+          terraform apply -input=false -auto-approve
 
       - name: Deploy to Cloud Run
         run: |

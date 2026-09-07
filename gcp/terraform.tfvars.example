@@ -1,0 +1,18 @@
+# Copy to terraform.tfvars to run this root by hand. The pipeline passes these as
+# TF_VAR_* from GitHub Actions secrets instead.
+
+project_id = "casa-ahun"
+region     = "us-central1"
+
+# From the shared IaC repo: terraform output spring_datasource_urls
+spring_datasource_url     = "jdbc:postgresql://db.<members-ref>.supabase.co:5432/ahun_members_service"
+spring_datasource_password = "your-supabase-db-password"
+
+telegram_chat_id = "-1001234567890"
+
+# From the shared IaC repo: terraform output -raw bot_token_secret
+bot_token_secret_id = "ahun-telegram-bot-token"
+
+# Service-account JSON for the Google Sheets sync, or leave as DEFAULT_GCP to use
+# the Cloud Run runtime SA.
+google_credentials = "DEFAULT_GCP"
