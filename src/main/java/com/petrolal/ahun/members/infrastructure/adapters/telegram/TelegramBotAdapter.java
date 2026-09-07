@@ -14,13 +14,16 @@ public class TelegramBotAdapter extends TelegramLongPollingBot implements Telegr
 
   private final String botUsername;
   private final String chatId;
+  private final TelegramCommandHandler commandHandler;
 
   public TelegramBotAdapter(
       @Value("${telegram.bot-token}") String botToken,
-      @Value("${telegram.chat-id}") String chatId) {
+      @Value("${telegram.chat-id}") String chatId,
+      @org.springframework.context.annotation.Lazy TelegramCommandHandler commandHandler) {
     super(botToken);
     this.botUsername = "AhunMembersBot"; // Could also be parameterized
     this.chatId = chatId;
+    this.commandHandler = commandHandler;
   }
 
   @Override
@@ -30,13 +33,18 @@ public class TelegramBotAdapter extends TelegramLongPollingBot implements Telegr
 
   @Override
   public void onUpdateReceived(Update update) {
-    // Not used right now
+    commandHandler.handle(update);
   }
 
   @Override
   public TelegramResponseDto sendNotification(String message) {
+    return sendNotification(this.chatId, message);
+  }
+
+  @Override
+  public TelegramResponseDto sendNotification(String targetChatId, String message) {
     SendMessage sendMessage = new SendMessage();
-    sendMessage.setChatId(chatId);
+    sendMessage.setChatId(targetChatId);
     sendMessage.setText(message);
 
     try {

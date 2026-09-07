@@ -41,6 +41,11 @@ public class TelegramUseCases implements TelegramPort {
         String.format("\uD83C\uDF89 Aniversáriantes de %s \n\n", daily ? "Hoje" : currentMonth);
     sb.append(message);
 
+    if (members.isEmpty()) {
+      sb.append("Nenhum aniversariante encontrado!\n");
+      return sb.toString();
+    }
+
     members.forEach(
         member -> {
           DateTimeFormatter formatter =
@@ -75,5 +80,24 @@ public class TelegramUseCases implements TelegramPort {
   @Override
   public TelegramResponseDto sendDailyMessage() {
     return telegramSenderPort.sendNotification(convertMemberCurrentMonthToTelegram(true));
+  }
+
+  @Override
+  public TelegramResponseDto sendMonthlyMessage(String chatId) {
+    return telegramSenderPort.sendNotification(chatId, convertMemberCurrentMonthToTelegram(false));
+  }
+
+  @Override
+  public TelegramResponseDto sendDailyMessage(String chatId) {
+    return telegramSenderPort.sendNotification(chatId, convertMemberCurrentMonthToTelegram(true));
+  }
+
+  @Override
+  public TelegramResponseDto sendMembersList(String chatId) {
+    List<Member> members = memberPort.getMembers();
+    StringBuilder sb = new StringBuilder();
+    sb.append(String.format("📋 Total de membros cadastrados: %d\n\n", members.size()));
+    members.forEach(m -> sb.append("• ").append(m.getMemberName()).append("\n"));
+    return telegramSenderPort.sendNotification(chatId, sb.toString());
   }
 }

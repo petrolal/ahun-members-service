@@ -4,4 +4,5 @@ import com.petrolal.ahun.members.domain.dto.TelegramResponseDto;
 
 public interface TelegramSenderPort {
   TelegramResponseDto sendNotification(String message);
+  TelegramResponseDto sendNotification(String chatId, String message);
 }

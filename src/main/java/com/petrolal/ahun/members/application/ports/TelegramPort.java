@@ -7,4 +7,10 @@ public interface TelegramPort {
   TelegramResponseDto sendMonthlyMessage();
 
   TelegramResponseDto sendDailyMessage();
+
+  TelegramResponseDto sendMonthlyMessage(String chatId);
+
+  TelegramResponseDto sendDailyMessage(String chatId);
+
+  TelegramResponseDto sendMembersList(String chatId);
 }
