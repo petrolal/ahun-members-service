@@ -60,10 +60,8 @@ resource "google_cloud_run_v2_service" "app" {
     ]
   }
 
-  # Ensure the service starts after the repository exists and the app SA can
-  # read the referenced secrets.
+  # Ensure the service starts after the app SA can read the referenced secrets.
   depends_on = [
-    google_artifact_registry_repository.repo,
     google_secret_manager_secret_iam_member.secret_accessor
   ]
 }

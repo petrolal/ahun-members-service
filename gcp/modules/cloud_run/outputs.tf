@@ -5,7 +5,7 @@ output "cloud_run_url" {
 
 output "registry_repository_url" {
   description = "The Artifact Registry Docker Repository URL"
-  value       = "${var.region}-docker.pkg.dev/${var.project_id}/${google_artifact_registry_repository.repo.repository_id}"
+  value       = "${var.region}-docker.pkg.dev/${var.project_id}/${var.service_name}"
 }
 
 output "app_service_account_email" {
