@@ -46,11 +46,12 @@ locals {
 module "cloud_run" {
   source = "./modules/cloud_run"
 
-  project_id      = var.project_id
-  region          = var.region
-  service_name    = "ahun-members-service"
-  env_vars        = local.env_vars
-  secret_env_vars = local.secret_env_vars
+  project_id              = var.project_id
+  region                  = var.region
+  service_name            = "ahun-members-service"
+  env_vars                = local.env_vars
+  secret_env_vars         = local.secret_env_vars
+  github_actions_sa_email = var.github_actions_sa_email
 
   scheduler_jobs = {
     "daily-bday" = {

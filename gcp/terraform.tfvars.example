@@ -4,6 +4,9 @@
 project_id = "casa-ahun"
 region     = "us-central1"
 
+# From the shared IaC repo: terraform output -json github_actions_sa_emails
+github_actions_sa_email = "ahun-members-service-github-sa@casa-ahun.iam.gserviceaccount.com"
+
 # From the shared IaC repo: terraform output spring_datasource_urls
 spring_datasource_url     = "jdbc:postgresql://db.<members-ref>.supabase.co:5432/ahun_members_service"
 spring_datasource_password = "your-supabase-db-password"

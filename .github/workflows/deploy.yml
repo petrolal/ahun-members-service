@@ -16,6 +16,7 @@ permissions:
   packages: write
   issues: write
   pull-requests: write
+  id-token: write # required to mint the GitHub OIDC token for GCP Workload Identity Federation
 
 env:
   GCP_PROJECT_ID: ${{ secrets.GCP_PROJECT_ID || 'casa-ahun' }}
@@ -56,10 +57,10 @@ jobs:
           echo "published = ${{ steps.semantic.outputs.new_release_published }}"
           echo "version   = ${{ steps.semantic.outputs.new_release_version }}"
 
-      - name: Detect GCP secrets
+      - name: Detect GCP config
         id: gcp
         run: |
-          echo "have_gcp=${{ secrets.GCP_SA_KEY != '' || secrets.GOOGLE_CREDENTIALS != '' || secrets.GCP_CREDENTIALS != '' }}" >> "$GITHUB_OUTPUT"
+          echo "have_gcp=${{ secrets.WIF_PROVIDER != '' && secrets.WIF_SERVICE_ACCOUNT != '' }}" >> "$GITHUB_OUTPUT"
 
   # -------------------------------------------------------------------------
   # Stage 2 - run the test suite
@@ -107,7 +108,8 @@ jobs:
         id: auth
         uses: google-github-actions/auth@v2
         with:
-          credentials_json: ${{ secrets.GCP_SA_KEY || secrets.GOOGLE_CREDENTIALS || secrets.GCP_CREDENTIALS }}
+          workload_identity_provider: ${{ secrets.WIF_PROVIDER }}
+          service_account: ${{ secrets.WIF_SERVICE_ACCOUNT }}
 
       - name: Set up Cloud SDK
         uses: google-github-actions/setup-gcloud@v2
@@ -151,7 +153,8 @@ jobs:
         id: auth
         uses: google-github-actions/auth@v2
         with:
-          credentials_json: ${{ secrets.GCP_SA_KEY || secrets.GOOGLE_CREDENTIALS || secrets.GCP_CREDENTIALS }}
+          workload_identity_provider: ${{ secrets.WIF_PROVIDER }}
+          service_account: ${{ secrets.WIF_SERVICE_ACCOUNT }}
 
       - name: Set up Cloud SDK
         uses: google-github-actions/setup-gcloud@v2
@@ -176,6 +179,7 @@ jobs:
           TF_VAR_telegram_chat_id: ${{ secrets.TELEGRAM_CHAT_ID }}
           TF_VAR_bot_token_secret_id: ${{ secrets.BOT_TOKEN_SECRET_ID }}
           TF_VAR_google_credentials: ${{ secrets.SHEETS_GOOGLE_CREDENTIALS || 'DEFAULT_GCP' }}
+          TF_VAR_github_actions_sa_email: ${{ secrets.WIF_SERVICE_ACCOUNT }}
         run: |
           terraform init -input=false
           terraform apply -input=false -auto-approve
