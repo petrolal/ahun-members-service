@@ -21,7 +21,8 @@ public class GoogleConfig {
   public void testCredentials() throws IOException {
     if (googleCredentialsJson == null
         || googleCredentialsJson.trim().isEmpty()
-        || "DEFAULT_GCP".equals(googleCredentialsJson.trim())) {
+        || "DEFAULT_GCP".equalsIgnoreCase(googleCredentialsJson.trim())
+        || googleCredentialsJson.trim().startsWith("${")) {
       try {
         GoogleCredentials credentials = GoogleCredentials.getApplicationDefault();
         if (credentials == null) {

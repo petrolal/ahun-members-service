@@ -27,7 +27,8 @@ public class GoogleSheetsAdapter implements SheetsReaderPort {
   private GoogleCredentials getCredentials() throws IOException {
     if (googleCredentialsJson == null
         || googleCredentialsJson.trim().isEmpty()
-        || "DEFAULT_GCP".equals(googleCredentialsJson.trim())) {
+        || "DEFAULT_GCP".equalsIgnoreCase(googleCredentialsJson.trim())
+        || googleCredentialsJson.trim().startsWith("${")) {
       return GoogleCredentials.getApplicationDefault()
           .createScoped(Collections.singleton(SheetsScopes.SPREADSHEETS));
     }
